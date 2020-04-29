@@ -1,0 +1,2 @@
+rootProject.name='FlickrRocket'
+include ':app'

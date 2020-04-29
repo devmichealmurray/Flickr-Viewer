@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flickr_rocket_nav"
+    app:startDestination="@id/favoritesFragment">
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.devmmurray.flickrrocket.ui.view.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favorites_to_detail"
+            app:destination="@id/flickrDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flickrDetailFragment"
+        android:name="com.devmmurray.flickrrocket.ui.view.FlickrDetailFragment"
+        android:label="fragment_flickr_detail"
+        tools:layout="@layout/fragment_flickr_detail" >
+        <action
+            android:id="@+id/action_detail_to_favorites"
+            app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_detail_to_list"
+            app:destination="@id/flickrListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flickrListFragment"
+        android:name="com.devmmurray.flickrrocket.ui.view.FlickrListFragment"
+        android:label="fragment_flickr_list"
+        tools:layout="@layout/fragment_flickr_list" >
+        <action
+            android:id="@+id/action_list_to_detail"
+            app:destination="@id/flickrDetailFragment" />
+    </fragment>
+</navigation>
