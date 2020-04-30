@@ -3,36 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/flickr_rocket_nav"
-    app:startDestination="@id/favoritesFragment">
+    app:startDestination="@id/home">
 
     <fragment
-        android:id="@+id/favoritesFragment"
+        android:id="@+id/favorites"
         android:name="com.devmmurray.flickrrocket.ui.view.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" >
+        tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favorites_to_detail"
-            app:destination="@id/flickrDetailFragment" />
+            app:destination="@id/home" />
     </fragment>
     <fragment
-        android:id="@+id/flickrDetailFragment"
+        android:id="@+id/home"
         android:name="com.devmmurray.flickrrocket.ui.view.FlickrDetailFragment"
         android:label="fragment_flickr_detail"
-        tools:layout="@layout/fragment_flickr_detail" >
+        tools:layout="@layout/fragment_flickr_detail">
         <action
             android:id="@+id/action_detail_to_favorites"
-            app:destination="@id/favoritesFragment" />
+            app:destination="@id/favorites" />
         <action
             android:id="@+id/action_detail_to_list"
-            app:destination="@id/flickrListFragment" />
+            app:destination="@id/search" />
     </fragment>
     <fragment
-        android:id="@+id/flickrListFragment"
-        android:name="com.devmmurray.flickrrocket.ui.view.FlickrListFragment"
+        android:id="@+id/search"
+        android:name="com.devmmurray.flickrrocket.ui.view.SearchListFragment"
         android:label="fragment_flickr_list"
-        tools:layout="@layout/fragment_flickr_list" >
+        tools:layout="@layout/fragment_flickr_list">
         <action
             android:id="@+id/action_list_to_detail"
-            app:destination="@id/flickrDetailFragment" />
+            app:destination="@id/home" />
     </fragment>
 </navigation>

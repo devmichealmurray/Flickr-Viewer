@@ -1,4 +1,4 @@
 package com.devmmurray.flickrrocket.ui.viewmodel
 
-class FlickrRocketViewModel {
+class FavoritesViewModel {
 }

@@ -8,4 +8,6 @@
     <string name="bottom_add">Add</string>
     <string name="bottom_favorites">Favorites</string>
     <string name="search_hint">What are you looking for?</string>
+    <string name="list_view_error">An Error Occurred While Loading Data</string>
+    <string name="images_from_flickr">Images From Flickr</string>
 </resources>

@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/home"
         android:icon="@drawable/ic_home"
-        android:title="@string/bottom_home" />
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        android:title="@string/bottom_home"
+        />
     <item
-        android:id="@+id/navigation_search"
+        android:id="@+id/search"
         android:icon="@drawable/ic_search"
+        android:orderInCategory="2"
         android:title="@string/bottom_search" />
     <item
-        android:id="@+id/navigation_add"
+        android:id="@+id/add"
         android:icon="@drawable/ic_add"
+        android:orderInCategory="3"
         android:title="@string/bottom_add" />
     <item
-        android:id="@+id/navigation_favorites"
+        android:id="@+id/favorites"
         android:icon="@drawable/ic_favorite_border"
+        android:orderInCategory="4"
         android:title="@string/bottom_favorites" />
 </menu>
