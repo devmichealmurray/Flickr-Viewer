@@ -1,10 +1,9 @@
 package com.devmmurray.flickrrocket.data.api
 
-import com.devmmurray.flickrrocket.data.model.UrlData
+import com.devmmurray.flickrrocket.data.model.Response
 import io.reactivex.Single
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 private const val BASE_URL = "https://api.flickr.com/services/rest/"
 
@@ -17,17 +16,19 @@ class FlickrApiService {
      *  This is the url if you want to see the JSON
      *
      *  https://api.flickr.com/services/rest/?format=json&method=flickr.photos.getRecent&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1.
-     *  
+     *
      */
 
     private val api = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create())
         .build()
-        .create(FlickrApi::class.java)
 
-    fun getOpenSearchJson(): Single<ArrayList<UrlData>> {
+    val service = api.create(FlickrApi::class.java)
+    val serviceExec = service.getPhotosUrlData().execute()
+    val response = serviceExec.body()
+
+    fun getOpenSearchJson(): Single<ArrayList<Response>> {
         return api.getPhotosUrlData()
     }
 }

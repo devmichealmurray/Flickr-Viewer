@@ -1,8 +1,8 @@
 package com.devmmurray.flickrrocket.data.api
 
-import com.devmmurray.flickrrocket.data.model.UrlData
-import io.reactivex.Single
-import retrofit2.http.POST
+import com.devmmurray.flickrrocket.data.model.Response
+import retrofit2.Call
+import retrofit2.http.GET
 
 /**
  * Info needed once I have the project working.
@@ -21,7 +21,7 @@ private const val OPEN_SEARCH_URL =
 
 interface FlickrApi {
 
-    @POST(OPEN_SEARCH_URL)
-    fun getPhotosUrlData(): Single<ArrayList<UrlData>>
+    @GET(OPEN_SEARCH_URL)
+    fun getPhotosUrlData(): Call<Response>
 
 }

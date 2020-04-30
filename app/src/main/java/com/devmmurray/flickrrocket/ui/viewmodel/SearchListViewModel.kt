@@ -35,8 +35,8 @@ class SearchListViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun getPhotoUrlData() {
         disposable.add(
-            apiService.getOpenSearchJson()
-                .subscribeOn(Schedulers.newThread())
+            apiService.getJsonData()
+                .
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ArrayList<UrlData>>() {
                     override fun onSuccess(list: ArrayList<UrlData>) {

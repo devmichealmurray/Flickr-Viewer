@@ -1,6 +1,6 @@
 package com.devmmurray.flickrrocket.data.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 class Photo(
     val title: String,
@@ -8,28 +8,28 @@ class Photo(
 )
 
 class Response(
-    @SerializedName("photos")
-    var photos: Photos?
+    @field:Json(name = "photos")
+    val photos: Photos?
 )
 
 class Photos(
-    @SerializedName("photo")
-    var urlData: UrlData?
+    @field:Json(name = "photo")
+    val photo: ArrayList<UrlData>
 )
 
 class UrlData(
-    @SerializedName("id")
+    @field:Json(name = "id")
     var id: String,
 
-    @SerializedName("secret")
+    @field:Json(name = "secret")
     var secret: String,
 
-    @SerializedName("server")
+    @field:Json(name = "server")
     var server: String,
 
-    @SerializedName("farm")
+    @field:Json(name = "farm")
     var farm: String,
 
-    @SerializedName("title")
+    @field:Json(name = "title")
     var title: String
 )
