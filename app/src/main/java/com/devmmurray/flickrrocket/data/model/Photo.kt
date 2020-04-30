@@ -9,7 +9,7 @@ class Photo(
 
 class Response(
     @field:Json(name = "photos")
-    val photos: Photos?
+    val photos: Photos
 )
 
 class Photos(

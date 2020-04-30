@@ -1,7 +1,6 @@
 package com.devmmurray.flickrrocket.data.api
 
-import com.devmmurray.flickrrocket.data.model.Response
-import io.reactivex.Single
+import com.devmmurray.flickrrocket.data.model.UrlData
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -24,11 +23,10 @@ class FlickrApiService {
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
 
-    val service = api.create(FlickrApi::class.java)
-    val serviceExec = service.getPhotosUrlData().execute()
-    val response = serviceExec.body()
-
-    fun getOpenSearchJson(): Single<ArrayList<Response>> {
-        return api.getPhotosUrlData()
+    fun getOpenSearchJson(): ArrayList<UrlData>? {
+        val service = api.create(FlickrApi::class.java)
+        val serviceExec = service.getPhotosUrlData().execute()
+        val response = serviceExec.body()
+        return response?.photos?.photo
     }
 }
