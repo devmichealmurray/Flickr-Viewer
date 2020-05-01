@@ -13,10 +13,14 @@ import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlin.properties.Delegates
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+    private var positionCounter by Delegates.notNull<Int>()
+    private var photoArray = ArrayList<Photo>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,28 +37,24 @@ class HomeFragment : Fragment() {
         homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         homeViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         homeViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
-
+        homeViewModel.photoPosition.observe(viewLifecycleOwner, photoPositionObserver)
         homeViewModel.refresh()
+
+        mainImageView.setOnClickListener {
+            homeViewModel.nextPhoto()
+            loadNewPhoto(positionCounter)
+            homeLoadingView.visibility = View.GONE
+        }
+    }
+
+    private val photoPositionObserver = Observer<Int> {
+         positionCounter = it
     }
 
     private val photoListObserver = Observer<ArrayList<Photo>> { list ->
         list?.let {
-            /**
-             * Picasso function is a temporary stub
-             *
-             * Will create and call a function that displays a swipable photo
-             */
-
-            Picasso.get()
-                .load(it[0].link)
-                .error(R.drawable.background)
-                .placeholder(R.drawable.background)
-                .fit()
-                .into(mainImageView)
-            homeLoadingView.visibility = View.GONE
-
-            imageTitleText.text = it[0].title
-            imageTitleText.movementMethod
+            photoArray = list
+            loadNewPhoto(0)
         }
     }
 
@@ -71,6 +71,18 @@ class HomeFragment : Fragment() {
             mainImageView.visibility = View.GONE
             searchLoadingView.visibility = View.GONE
         }
+    }
+
+    private fun loadNewPhoto(position: Int) {
+        Picasso.get()
+            .load(photoArray[position].link)
+            .error(R.drawable.background)
+            .placeholder(R.drawable.background)
+            .fit()
+            .into(mainImageView)
+        homeLoadingView.visibility = View.GONE
+
+        imageTitleText.text = photoArray[position].title
     }
 
 

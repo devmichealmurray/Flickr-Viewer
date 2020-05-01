@@ -27,6 +27,11 @@ class HomeViewModel(application: Application): AndroidViewModel(application), On
     val loading: LiveData<Boolean>
         get() = _loading
 
+    private val _photoPosition by lazy { MutableLiveData<Int>() }
+    val photoPosition: LiveData<Int>
+        get() = _photoPosition
+
+    private var position = 0
 
     fun refresh() {
         Log.d("HomeViewModel", "Refresh Called")
@@ -39,5 +44,19 @@ class HomeViewModel(application: Application): AndroidViewModel(application), On
         Log.d("HomeViewModel", "Response Returned $data")
         _photos.value = data
         _loading.value = false
+    }
+
+    fun nextPhoto() {
+        _loading.value = true
+        getPhotoPosition()
+    }
+
+    private fun getPhotoPosition() {
+        if (position != 99) {
+            position++
+        } else {
+            position = 0
+        }
+        _photoPosition.value = position
     }
 }
