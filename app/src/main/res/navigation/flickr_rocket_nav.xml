@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/home"
-        android:name="com.devmmurray.flickrrocket.ui.view.FlickrDetailFragment"
+        android:name="com.devmmurray.flickrrocket.ui.view.HomeFragment"
         android:label="fragment_flickr_detail"
-        tools:layout="@layout/fragment_flickr_detail">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_detail_to_favorites"
             app:destination="@id/favorites" />

@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.devmmurray.flickrrocket.R
 
-class FlickrDetailFragment : Fragment() {
+/**
+ * A simple [Fragment] subclass.
+ */
+class SearchDetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        return inflater.inflate(R.layout.fragment_flickr_detail, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_search_detail, container, false)
     }
 
 }

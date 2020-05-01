@@ -10,4 +10,6 @@
     <string name="search_hint">What are you looking for?</string>
     <string name="list_view_error">An Error Occurred While Loading Data</string>
     <string name="images_from_flickr">Images From Flickr</string>
+    <string name="suggestion_button_placeholder">Suggestion</string>
+    <string name="title_text_placeholder">This is where the title text will go</string>
 </resources>

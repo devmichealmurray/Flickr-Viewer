@@ -3,12 +3,12 @@ package com.devmmurray.flickrrocket.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.devmmurray.flickrrocket.R
 
 class SuggestionsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val buttonText: Button = view.findViewById(R.id.suggestionButton)
+    private val buttonText: TextView = view.findViewById(R.id.suggestionButton)
     fun onBind(suggestion: String) {
         buttonText.text = suggestion
     }

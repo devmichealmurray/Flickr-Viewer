@@ -4,17 +4,22 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <Button
+    <TextView
         android:id="@+id/suggestionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:padding="0dp"
-        android:elevation="4dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingEnd="14dp"
+        android:paddingStart="14dp"
+        android:elevation="2dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
         android:background="@drawable/suggestions_button_background"
-        android:text=""
+        android:text="@string/suggestion_button_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

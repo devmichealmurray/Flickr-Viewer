@@ -6,37 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".ui.view.SearchListFragment">
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:iconifiedByDefault="false"
-        android:background="@null"
-        android:queryHint="@string/search_hint"
-        app:layout_constraintBottom_toTopOf="@id/suggestions"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </SearchView>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/suggestions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:elevation="12dp"
         app:layout_constraintBottom_toTopOf="@id/refreshLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView">
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="8dp">
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@null"
+            android:background="@drawable/search_background"
+            android:queryHint="@string/search_hint"
+            app:layout_constraintBottom_toTopOf="@id/suggestionsRecycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </SearchView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/suggestionsRecycler"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
+            android:elevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchView"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -50,8 +54,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/suggestions"
-        tools:layout_editor_absoluteX="403dp">
+        app:layout_constraintTop_toBottomOf="@id/suggestions">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

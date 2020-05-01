@@ -22,30 +22,13 @@ class SearchListFragment : Fragment() {
     private lateinit var searchListViewModel: SearchListViewModel
     private val searchListAdapter = FlickrRocketRecyclerAdapter(arrayListOf())
     private val suggestionListAdapter = SuggestionsRecyclerView(arrayListOf(
+        /**
+         * Consider changing this array to a mutable array that can be updated
+         * by recent search terms
+         */
+
         "Travel", "Decor", "Food", "Architecture", "Art", "Nature", "Style", "Music", "Movies", "Beauty"
     ))
-
-    private val photoListDataObserver = Observer<ArrayList<Photo>> { list ->
-        list?.let {
-            searchFragRecyclerView.visibility = View.VISIBLE
-            Log.d("SearchListFragment", "$list")
-            searchListAdapter.updatePhotoList(it)
-        }
-    }
-    private val loadingLiveDataObserver = Observer<Boolean> { isLoading ->
-        searchLoadingView.visibility = if(isLoading) View.VISIBLE else View.GONE
-        if (isLoading) {
-            searchListError.visibility = View.GONE
-            searchFragRecyclerView.visibility = View.GONE
-        }
-    }
-    private val errorLiveDataObserver = Observer<Boolean> { isError ->
-        searchListError.visibility = if (isError) View.VISIBLE else View.GONE
-        if (isError) {
-            searchFragRecyclerView.visibility = View.GONE
-            searchLoadingView.visibility = View.GONE
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +62,29 @@ class SearchListFragment : Fragment() {
 
             searchListViewModel.refresh()
             refreshLayout.isRefreshing = false
+        }
+    }
+
+
+    private val photoListDataObserver = Observer<ArrayList<Photo>> { list ->
+        list?.let {
+            searchFragRecyclerView.visibility = View.VISIBLE
+            Log.d("SearchListFragment", "$list")
+            searchListAdapter.updatePhotoList(it)
+        }
+    }
+    private val loadingLiveDataObserver = Observer<Boolean> { isLoading ->
+        searchLoadingView.visibility = if(isLoading) View.VISIBLE else View.GONE
+        if (isLoading) {
+            searchListError.visibility = View.GONE
+            searchFragRecyclerView.visibility = View.GONE
+        }
+    }
+    private val errorLiveDataObserver = Observer<Boolean> { isError ->
+        searchListError.visibility = if (isError) View.VISIBLE else View.GONE
+        if (isError) {
+            searchFragRecyclerView.visibility = View.GONE
+            searchLoadingView.visibility = View.GONE
         }
     }
 }
