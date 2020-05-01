@@ -1,17 +1,18 @@
 package com.devmmurray.flickrrocket.ui.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.devmmurray.flickrrocket.data.api.FlickrApiService
+import com.devmmurray.flickrrocket.data.api.GetJsonData
+import com.devmmurray.flickrrocket.data.api.OnDataAvailable
 import com.devmmurray.flickrrocket.data.model.Photo
-import com.devmmurray.flickrrocket.data.model.UrlData
 import io.reactivex.disposables.CompositeDisposable
 
 private const val BASE_URL =
-    "https://api.flickr.com/services/rest/?format=json&method=flickr.photos.getRecent&api_key=0e2b6aaf8a6901c264acb91f151a3350"
-
-class SearchListViewModel(application: Application) : AndroidViewModel(application) {
+    "https://api.flickr.com/services/rest/?format=json&sort=random&method=flickr.photos.search&tags=rocket&tag_mode=all&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1."
+class SearchListViewModel(application: Application) : AndroidViewModel(application), OnDataAvailable {
 
     /**
      *  Adjust with _liveData so that MutableLiveData is not exposed
@@ -25,33 +26,42 @@ class SearchListViewModel(application: Application) : AndroidViewModel(applicati
     private val apiService = FlickrApiService()
 
     fun refresh() {
+        Log.d("SearchListViewModel", "Refresh Called")
         loading.value = true
-        getPhotoUrlData()
+        val getJsonData = GetJsonData(this)
+        getJsonData.execute(BASE_URL)
+        loading.value = false
     }
 
-    private fun getPhotoUrlData() {
-        val flickrService = FlickrApiService()
-        val response = flickrService.getOpenSearchJson()
-        if (response != null) {
-            buildUri(response)
-        }
+    override fun onDataAvailable(data: ArrayList<Photo>) {
+        Log.d("SearchListViewModel", "Response Returned $data")
+        photos.value = data
     }
 
-    private fun buildUri(list: ArrayList<UrlData>) {
-        val photoList = ArrayList<Photo>()
+    //    private fun getPhotoUrlData() {
+//        disposable.add(
+//            apiService.getOpenSearchJson()
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeWith(object : DisposableSingleObserver<Response>() {
+//                    override fun onSuccess(t: Response) {
+//                        Log.d(".getPhotoUrlData", "on Success returns $t")
+//                        loadError.value = false
+//                        loading.value = false
+//                        val list = t
+//                    }
+//
+//                    override fun onError(e: Throwable) {
+//                        Log.e(".getPhotoUrlData", "Error ${e.localizedMessage}")
+//                        e.printStackTrace()
+//                        loadError.value = true
+//                        loading.value = false
+//                        photos.value = null
+//                    }
+//                })
+//        )
+//    }
 
-        for (i in 0 until list.size) {
-            val item = list[i]
-            val farm = item.farm
-            val server = item.server
-            val id = item.id
-            val secret = item.secret
-            val title = item.title
-            val link = "https://farm${farm}.static.flickr.com/${server}/${id}_${secret}_m.jpg"
-            val photo = Photo(link, title)
-            photoList.add(photo)
-        }
-        photos.value = photoList
-    }
+
 
 }

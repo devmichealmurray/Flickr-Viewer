@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.Photo
 import com.devmmurray.flickrrocket.ui.adapter.FlickrRocketRecyclerAdapter
+import com.devmmurray.flickrrocket.ui.adapter.SuggestionsRecyclerView
 import com.devmmurray.flickrrocket.ui.viewmodel.SearchListViewModel
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
 
@@ -19,6 +21,9 @@ class SearchListFragment : Fragment() {
 
     private lateinit var searchListViewModel: SearchListViewModel
     private val searchListAdapter = FlickrRocketRecyclerAdapter(arrayListOf())
+    private val suggestionListAdapter = SuggestionsRecyclerView(arrayListOf(
+        "Travel", "Decor", "Food", "Architecture", "Art", "Nature", "Style", "Music", "Movies", "Beauty"
+    ))
 
     private val photoListDataObserver = Observer<ArrayList<Photo>> { list ->
         list?.let {
@@ -57,6 +62,11 @@ class SearchListFragment : Fragment() {
         searchListViewModel.loadError.observe(viewLifecycleOwner,errorLiveDataObserver)
 
         searchListViewModel.refresh()
+
+        suggestionsRecycler.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = suggestionListAdapter
+        }
 
         searchFragRecyclerView.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

@@ -12,14 +12,14 @@ import com.squareup.picasso.Picasso
 
 
 class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val holder: ImageView =  view.findViewById(R.id.listItemImageView)
+    private val holder: ImageView = view.findViewById(R.id.listItemImageView)
     fun bind(photo: Photo) {
         Log.d("Holder.Bind", "${photo.link}")
         Picasso.get()
             .load(photo.link)
             .error(R.drawable.image_placeholder)
             .placeholder(R.drawable.image_placeholder)
-            .centerCrop()
+            .fit()
             .into(holder)
     }
 }

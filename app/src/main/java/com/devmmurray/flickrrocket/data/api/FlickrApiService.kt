@@ -1,9 +1,5 @@
 package com.devmmurray.flickrrocket.data.api
 
-import com.devmmurray.flickrrocket.data.model.UrlData
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-
 private const val BASE_URL = "https://api.flickr.com/services/rest/"
 
 class FlickrApiService {
@@ -18,15 +14,14 @@ class FlickrApiService {
      *
      */
 
-    private val api = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
-
-    fun getOpenSearchJson(): ArrayList<UrlData>? {
-        val service = api.create(FlickrApi::class.java)
-        val serviceExec = service.getPhotosUrlData().execute()
-        val response = serviceExec.body()
-        return response?.photos?.photo
-    }
+//    private val api = Retrofit.Builder()
+//        .baseUrl(BASE_URL)
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//        .build()
+//        .create(FlickrApi::class.java)
+//
+//    fun getOpenSearchJson(): Single<Response> {
+//        return api.getPhotosUrlData()
+//    }
 }
