@@ -7,25 +7,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.Photo
+import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.squareup.picasso.Picasso
 
 
 class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val holder: ImageView = view.findViewById(R.id.listItemImageView)
-    fun bind(photo: Photo) {
-        Log.d("Holder.Bind", "${photo.link}")
+    private val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
+
+    fun bindPhoto(item: PhotoObject) {
         Picasso.get()
-            .load(photo.link)
+            .load(item.link)
             .error(R.drawable.image_placeholder)
             .placeholder(R.drawable.image_placeholder)
             .fit()
-            .into(holder)
+            .into(photoHolder)
     }
 }
 
-class FlickrRocketRecyclerAdapter(private val photoList: ArrayList<Photo>) :
+
+class FlickrRocketRecyclerAdapter(private val List: ArrayList<PhotoObject>) :
     RecyclerView.Adapter<FlickrViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -33,17 +35,16 @@ class FlickrRocketRecyclerAdapter(private val photoList: ArrayList<Photo>) :
         return FlickrViewHolder(view)
     }
 
-    override fun getItemCount(): Int = photoList.size
+    override fun getItemCount(): Int = List.size
 
     override fun onBindViewHolder(holder: FlickrViewHolder, position: Int) {
-        holder.bind(photoList[position])
-
+        holder.bindPhoto(List[position])
     }
 
-    fun updatePhotoList(newList: ArrayList<Photo>) {
+    fun updatePhotoList(newList: ArrayList<PhotoObject>) {
         Log.d("Update Photo List", "$newList")
-        photoList.clear()
-        photoList.addAll(newList)
+        List.clear()
+        List.addAll(newList)
         notifyDataSetChanged()
     }
 }

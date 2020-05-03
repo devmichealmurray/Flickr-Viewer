@@ -5,18 +5,24 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.devmmurray.flickrrocket.data.api.GetJsonData
-import com.devmmurray.flickrrocket.data.api.OnDataAvailable
-import com.devmmurray.flickrrocket.data.model.Photo
+import androidx.lifecycle.viewModelScope
+import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.data.repository.Repository
+import kotlinx.coroutines.launch
+import java.io.IOException
+
+// result.body()?.photo?.photolist?
 
 private const val BASE_URL =
     "https://api.flickr.com/services/rest/?format=json&sort=random&method=flickr.photos.search&tags=rocket&tag_mode=all&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1."
 
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
-class HomeViewModel(application: Application): AndroidViewModel(application), OnDataAvailable {
+    private var position = 0
+    private val photoList = ArrayList<PhotoObject>()
 
-    private val _photos by lazy { MutableLiveData<ArrayList<Photo>>() }
-    val photos: LiveData<ArrayList<Photo>>
+    private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
+    val photos: LiveData<ArrayList<PhotoObject>>
         get() = _photos
 
     private val _loadError by lazy { MutableLiveData<Boolean>() }
@@ -31,19 +37,48 @@ class HomeViewModel(application: Application): AndroidViewModel(application), On
     val photoPosition: LiveData<Int>
         get() = _photoPosition
 
-    private var position = 0
 
     fun refresh() {
-        Log.d("HomeViewModel", "Refresh Called")
         _loading.value = true
-        val getJsonData = GetJsonData(this)
-        getJsonData.execute(BASE_URL)
+        loadData()
     }
 
-    override fun onDataAvailable(data: ArrayList<Photo>) {
-        Log.d("HomeViewModel", "Response Returned $data")
-        _photos.value = data
-        _loading.value = false
+    private fun loadData() {
+        viewModelScope.launch {
+            try {
+                val result = Repository.getRecentPhotosJson()
+                Log.d("Load Data", "$result")
+
+                if (result.isSuccessful) {
+                    result.body()?.photos?.photoList?.forEach {
+                        Log.d("API", "${it.urlLink} **** ${it.title}")
+                        if (!it.urlLink.isNullOrEmpty() && !it.title.isNullOrEmpty()) {
+                            val link = it.urlLink
+                            val title = it.title
+                            val photo = link?.let { it1 -> PhotoObject(title, it1) }
+                            if (photo != null) {
+                                photoList.add(photo)
+                            }
+                        }
+                        _photos.value = photoList
+                    }
+                } else {
+                    Log.d("API", "Get Recent Photos Failed")
+                    _loadError.value = true
+                    _loading.value = false
+                    _photos.value = null
+                }
+            } catch (e: IOException) {
+                Log.d("API", "Api Failed Exception: ", e)
+                e.printStackTrace()
+                /**
+                 * Live Event for snackbar
+                 */
+
+            } catch (e: Exception) {
+                Log.d("API", "Api Failed Exception: ", e)
+            }
+        }
     }
 
     fun nextPhoto() {

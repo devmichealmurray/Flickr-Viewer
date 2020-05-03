@@ -1,24 +1,32 @@
 package com.devmmurray.flickrrocket.data.api
 
-
-/**
- * Info needed once I have the project working.
- *  Api Key api_key=0e2b6aaf8a6901c264acb91f151a3350
- *
- *  Full Url =
- *  ?format=json&sort=random&method=flickr.photos.search&tags=rocket&tag_mode=all&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1.
- *  Base Url =
- *  https://api.flickr.com/services/rest/
- *  Open search =
- *  https://api.flickr.com/services/rest/?format=json&method=flickr.photos.getRecent&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1.
- */
+import com.devmmurray.flickrrocket.data.model.GetPhotosDto
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 private const val OPEN_SEARCH_URL =
     "?format=json&method=flickr.photos.getRecent&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1."
 
-//interface FlickrApi {
-//
-//    @POST(OPEN_SEARCH_URL)
-//    fun getPhotosUrlData(): Single<Response>
-//
-//}
+interface FlickrApi {
+
+    @GET("rest/")
+    suspend fun getRecentPhotosUrlData(
+        @Query("format") format: String,
+        @Query("method") method: String,
+        @Query("api_key") apiKey: String,
+        @Query("nojsoncallback") noJsonCallBack: String
+    ): Response<GetPhotosDto>
+
+    @GET("rest/")
+    suspend fun searchPhotos(
+        @Query("format") format: String,
+        @Query("method") method: String,
+        @Query("sort") sort: String,
+        @Query("tags") tags: String,
+        @Query("tag_mode") tagMode: String,
+        @Query("api_key") apiKey: String,
+        @Query("nojsoncallback") noJsonCallBack: String
+    ): Response<GetPhotosDto>
+
+}

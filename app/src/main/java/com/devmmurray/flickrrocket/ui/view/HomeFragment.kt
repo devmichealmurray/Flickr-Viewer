@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.Photo
+import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
@@ -19,7 +19,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private var positionCounter by Delegates.notNull<Int>()
-    private var photoArray = ArrayList<Photo>()
+    private var photoArray = ArrayList<PhotoObject>()
 
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class HomeFragment : Fragment() {
          positionCounter = it
     }
 
-    private val photoListObserver = Observer<ArrayList<Photo>> { list ->
+    private val photoListObserver = Observer<ArrayList<PhotoObject>> { list ->
         list?.let {
             photoArray = list
             loadNewPhoto(0)

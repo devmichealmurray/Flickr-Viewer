@@ -1,33 +1,42 @@
 package com.devmmurray.flickrrocket.ui.view
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.Photo
+import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.ui.adapter.FlickrRocketRecyclerAdapter
 import com.devmmurray.flickrrocket.ui.adapter.SuggestionsRecyclerView
 import com.devmmurray.flickrrocket.ui.viewmodel.SearchListViewModel
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
 
-class SearchListFragment : Fragment() {
 
+class SearchListFragment : Fragment(){
+
+    private var searchView: SearchView? = null
     private lateinit var searchListViewModel: SearchListViewModel
     private val searchListAdapter = FlickrRocketRecyclerAdapter(arrayListOf())
     private val suggestionListAdapter = SuggestionsRecyclerView(arrayListOf(
-        /**
-         * Consider changing this array to a mutable array that can be updated
-         * by recent search terms
-         */
-
-        "Travel", "Decor", "Food", "Architecture", "Art", "Nature", "Style", "Music", "Movies", "Beauty"
+        "Travel",
+        "Decor",
+        "Food",
+        "Architecture",
+        "Art",
+        "Nature",
+        "Style",
+        "Music",
+        "Movies",
+        "Beauty"
     ))
 
     override fun onCreateView(
@@ -55,6 +64,7 @@ class SearchListFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = searchListAdapter
         }
+
         refreshLayout.setOnRefreshListener {
             searchFragRecyclerView.visibility = View.GONE
             searchListError.visibility = View.GONE
@@ -63,14 +73,24 @@ class SearchListFragment : Fragment() {
             searchListViewModel.refresh()
             refreshLayout.isRefreshing = false
         }
+
+        val searchManager =
+            activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView = view.findViewById(R.id.searchView) as SearchView
+        val componentName = activity?.componentName
+        val searchableInfo = searchManager.getSearchableInfo(componentName)
+        Log.d("SearchListFragment", "SearchManager $componentName")
+        Log.d("SearchListFragment", "SearchManager Hint: ${searchView?.queryHint}")
+        Log.d("SearchListFragment", "SearchManager $searchableInfo")
+
     }
 
-
-    private val photoListDataObserver = Observer<ArrayList<Photo>> { list ->
+    private val photoListDataObserver = Observer<ArrayList<PhotoObject>> { list ->
         list?.let {
-            searchFragRecyclerView.visibility = View.VISIBLE
-            Log.d("SearchListFragment", "$list")
             searchListAdapter.updatePhotoList(it)
+            searchFragRecyclerView.visibility = View.VISIBLE
+            searchListError.visibility = View.GONE
+            searchLoadingView.visibility = View.GONE
         }
     }
     private val loadingLiveDataObserver = Observer<Boolean> { isLoading ->

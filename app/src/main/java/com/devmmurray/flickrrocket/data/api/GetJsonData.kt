@@ -1,21 +1,20 @@
 package com.devmmurray.flickrrocket.data.api
 
 import android.os.AsyncTask
-import android.util.Log
-import com.devmmurray.flickrrocket.data.model.Photo
+import com.devmmurray.flickrrocket.data.model.PhotoObject
 import org.json.JSONException
 import org.json.JSONObject
 
 class GetJsonData(private val listener: OnDataAvailable) :
-    AsyncTask<String, Void, ArrayList<Photo>>() {
+    AsyncTask<String, Void, ArrayList<PhotoObject>>() {
 
-    override fun doInBackground(vararg params: String): ArrayList<Photo> {
-        Log.d("GetJsonData", "DoInBackground Called")
-        val jsonPhotos = ArrayList<Photo>()
+    override fun doInBackground(vararg params: String): ArrayList<PhotoObject> {
+
+        val jsonPhotos = ArrayList<PhotoObject>()
 
         try {
             val jsonString = JSONObject(getUrlAsString(params[0]))
-            Log.d("GetJsonData", "$jsonString")
+
             val jsonPhotosObj = jsonString.getJSONObject("photos")
             val photosArray = jsonPhotosObj.getJSONArray("photo")
 
@@ -28,8 +27,7 @@ class GetJsonData(private val listener: OnDataAvailable) :
                 val title = photoObj.getString("title")
 
                 val link = "https://farm${farm}.static.flickr.com/${server}/${id}_${secret}_m.jpg"
-                val photo = Photo(link, title)
-                Log.d("DoInBackground", "${photo.link}")
+                val photo = PhotoObject(link, title)
                 jsonPhotos.add(photo)
 
             }
@@ -38,11 +36,11 @@ class GetJsonData(private val listener: OnDataAvailable) :
             e.printStackTrace()
             cancel(true)
         }
-        Log.d("DoInBackground", " Returning $jsonPhotos")
+
         return jsonPhotos
     }
 
-    override fun onPostExecute(result: ArrayList<Photo>) {
+    override fun onPostExecute(result: ArrayList<PhotoObject>) {
         super.onPostExecute(result)
         listener.onDataAvailable(result)
     }
