@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.HomeFragment"
-    android:background="#000000">
-
+    tools:context=".ui.view.HomeFragment">
 
     <ImageView
         android:id="@+id/mainImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/main_imageview_description"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,55 +18,95 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <TextView
+        android:id="@+id/flickr_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="34dp"
+        android:fontFamily="@font/anton"
+        android:padding="2dp"
+        android:text="@string/flickr"
+        android:textColor="@color/colorWhite"
+        android:textSize="26sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/rocket_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rocket_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:fontFamily="sans-serif-black"
+        android:padding="2dp"
+        android:text="@string/rocket"
+        android:textColor="@color/colorRed"
+        android:textSize="34sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintStart_toEndOf="@+id/flickr_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
         android:id="@+id/comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
         android:src="@drawable/ic_comment_black_24dp"
+        android:background="@drawable/icon_button_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:layout_marginEnd="12dp"
         android:src="@drawable/ic_share"
+        android:background="@drawable/icon_button_background"
         app:layout_constraintBottom_toTopOf="@+id/comment"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/icon_button_background"
         android:src="@drawable/ic_favorite_white"
         app:layout_constraintBottom_toTopOf="@+id/share"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/imageTitleText"
-        android:scrollHorizontally="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginBottom="12dp"
+        android:maxLength="30"
         android:text="@string/title_text_placeholder"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/photoComments"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        />
-
+    <TextView
+        android:id="@+id/photoComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/photo_comments"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView

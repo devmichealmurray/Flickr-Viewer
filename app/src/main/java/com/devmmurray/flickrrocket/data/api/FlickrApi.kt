@@ -5,9 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val OPEN_SEARCH_URL =
-    "?format=json&method=flickr.photos.getRecent&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1."
-
 interface FlickrApi {
 
     @GET("rest/")

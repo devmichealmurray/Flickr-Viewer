@@ -20,12 +20,12 @@ object Repository {
         )
     }
 
-    suspend fun searchPhotos(tag: String):Response<GetPhotosDto> {
+    suspend fun searchPhotos(search: String):Response<GetPhotosDto> {
         return FlickrApiService.apiClient.searchPhotos(
             format = "json",
             method = SEARCH_METHOD,
             sort = SORT,
-            tags = "Rocket",
+            tags = search,
             tagMode = TAG_MODE,
             apiKey = API_KEY,
             noJsonCallBack = "1"

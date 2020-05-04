@@ -14,6 +14,7 @@
             android:id="@+id/action_favorites_to_detail"
             app:destination="@id/home" />
     </fragment>
+
     <fragment
         android:id="@+id/home"
         android:name="com.devmmurray.flickrrocket.ui.view.HomeFragment"
@@ -34,5 +35,13 @@
         <action
             android:id="@+id/action_list_to_detail"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_search_to_searchResults"
+            app:destination="@id/searchResults" />
     </fragment>
+    <fragment
+        android:id="@+id/searchResults"
+        android:name="com.devmmurray.flickrrocket.ui.view.SearchResults"
+        android:label="fragment_search_results"
+        tools:layout="@layout/fragment_search_results" />
 </navigation>

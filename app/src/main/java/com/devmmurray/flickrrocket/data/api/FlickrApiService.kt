@@ -5,7 +5,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 private const val BASE_URL = "https://api.flickr.com/services/"
 
-
 object FlickrApiService {
 
     private val retrofit = Retrofit.Builder()
