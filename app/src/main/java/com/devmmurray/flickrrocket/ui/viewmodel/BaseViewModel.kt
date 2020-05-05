@@ -14,12 +14,12 @@ import com.devmmurray.flickrrocket.data.repository.Repository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class BaseViewModel(application: Application): AndroidViewModel(application) {
+open class BaseViewModel(application: Application): AndroidViewModel(application) {
 
     private val sharedPref: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(application)
-
     private var position = 0
+
     private val photoList = ArrayList<PhotoObject>()
 
     private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
@@ -34,17 +34,12 @@ class BaseViewModel(application: Application): AndroidViewModel(application) {
     val loading: LiveData<Boolean>
         get() = _loading
 
-    private val _photoPosition by lazy { MutableLiveData<Int>() }
-    val photoPosition: LiveData<Int>
-        get() = _photoPosition
-
     fun refresh() {
         _loading.value = true
         val queryResults = sharedPref.getString(FLICKR_QUERY, "")
-        val query = queryResults
-    Log.d("Refresh **********", "******************************** $queryResults")
-        if (query != null && query != "") {
-            loadData(query)
+        Log.d("Refresh **********", "******************************** $queryResults")
+        if (queryResults != null && queryResults != "") {
+            loadData(queryResults)
         } else {
             loadData("rocket")
         }
@@ -82,18 +77,4 @@ class BaseViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun nextPhoto() {
-        _loading.value = true
-        getPhotoPosition()
-    }
-
-    private fun getPhotoPosition() {
-        val size = photoList.size -1
-        if (position == size) {
-            position = 0
-        } else {
-            position++
-        }
-        _photoPosition.value = position
-    }
 }

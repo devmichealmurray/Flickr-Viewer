@@ -6,6 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.devmmurray.flickrrocket.data.model.PhotoObject
 
+
+/**
+ * May Not need this ViewModel. Consider deleting
+ */
+
 class SearchListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val photoList = ArrayList<PhotoObject>()

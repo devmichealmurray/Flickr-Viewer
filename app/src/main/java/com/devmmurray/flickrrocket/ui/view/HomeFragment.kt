@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.PhotoObject
-import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
+import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -18,10 +18,9 @@ import kotlin.properties.Delegates
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: BaseViewModel
+    private lateinit var homeViewModel: HomeViewModel
     private var positionCounter by Delegates.notNull<Int>()
     private var photoArray = ArrayList<PhotoObject>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +31,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        homeViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         homeViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         homeViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
@@ -42,7 +40,7 @@ class HomeFragment : Fragment() {
 
         mainImageView.setOnClickListener {
             if (photoArray.isNotEmpty()) {
-            homeViewModel.nextPhoto()
+            homeViewModel.nextPhoto(photoArray.size -1)
             loadNewPhoto(positionCounter)
             homeLoadingView.visibility = View.GONE
             } else {
@@ -52,8 +50,9 @@ class HomeFragment : Fragment() {
 
     }
 
+
     private val photoPositionObserver = Observer<Int> {
-         positionCounter = it
+        positionCounter = it
     }
 
     private val photoListObserver = Observer<ArrayList<PhotoObject>> { list ->
