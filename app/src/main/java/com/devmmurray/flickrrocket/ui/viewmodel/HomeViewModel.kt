@@ -13,12 +13,13 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         get() = _photoPosition
 
 
-    fun nextPhoto(arraySize: Int) {
+    fun nextPhoto() {
 //        _loading.value = true
-        getPhotoPosition(arraySize)
+        getPhotoPosition()
     }
 
-    private fun getPhotoPosition(arraySize: Int) {
+    private fun getPhotoPosition() {
+        val arraySize = photos.value?.size
         if (position == arraySize) {
             position = 0
         } else {

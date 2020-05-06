@@ -24,10 +24,6 @@
             android:name="photoPosition"
             android:defaultValue="0"
             app:argType="integer" />
-        <argument
-            android:name="fromRecyclerClick"
-            android:defaultValue="false"
-            app:argType="boolean" />
         <action
             android:id="@+id/action_detail_to_favorites"
             app:destination="@id/favorites" />
@@ -48,10 +44,6 @@
                 android:name="photoPosition"
                 android:defaultValue="0"
                 app:argType="integer" />
-            <argument
-                android:name="fromRecyclerClick"
-                android:defaultValue="false"
-                app:argType="boolean" />
         </action>
         <action
             android:id="@+id/action_search_to_searchResults"

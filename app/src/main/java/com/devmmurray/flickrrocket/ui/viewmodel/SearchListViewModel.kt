@@ -1,31 +1,25 @@
 package com.devmmurray.flickrrocket.ui.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.devmmurray.flickrrocket.data.model.PhotoObject
 
 
 /**
  * May Not need this ViewModel. Consider deleting
  */
 
-class SearchListViewModel(application: Application) : AndroidViewModel(application) {
+class SearchListViewModel(application: Application) : BaseViewModel(application) {
 
-    private val photoList = ArrayList<PhotoObject>()
-
-    private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
-    val photos: LiveData<ArrayList<PhotoObject>>
-        get() = _photos
-
-    private val _loadError by lazy { MutableLiveData<Boolean>() }
-    val loadError: LiveData<Boolean>
-        get() = _loadError
-
-    private val _loading by lazy { MutableLiveData<Boolean>() }
-    val loading: LiveData<Boolean>
-        get() = _loading
+//    private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
+//    val photos: LiveData<ArrayList<PhotoObject>>
+//        get() = _photos
+//
+//    private val _loadError by lazy { MutableLiveData<Boolean>() }
+//    val loadError: LiveData<Boolean>
+//        get() = _loadError
+//
+//    private val _loading by lazy { MutableLiveData<Boolean>() }
+//    val loading: LiveData<Boolean>
+//        get() = _loading
 
 //
 //    fun refresh() {

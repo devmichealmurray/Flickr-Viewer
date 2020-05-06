@@ -13,7 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.FLICKR_QUERY
+import com.devmmurray.flickrrocket.data.model.UrlAddress
 import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,8 +35,21 @@ class FlickrRocket : AppCompatActivity() {
         )
 
         baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+        baseViewModel.refresh()
 
         setUpNavigation()
+
+    }
+
+    private fun setUpNavigation() {
+        bottomNavBar = findViewById(R.id.bottom_nav)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
+        NavigationUI.setupWithNavController(
+            bottomNavBar,
+            navHostFragment!!.navController
+        )
+        navController = navHostFragment.navController
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -59,7 +72,7 @@ class FlickrRocket : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val sharedPref = PreferenceManager
                     .getDefaultSharedPreferences(applicationContext)
-                sharedPref.edit().putString(FLICKR_QUERY, query).apply()
+                sharedPref.edit().putString(UrlAddress.FLICKR_QUERY, query).apply()
                 searchView?.clearFocus()
                 searchView?.setQuery("", false)
 
@@ -76,18 +89,6 @@ class FlickrRocket : AppCompatActivity() {
                 return false
             }
         })
-
-    }
-
-    private fun setUpNavigation() {
-        bottomNavBar = findViewById(R.id.bottom_nav)
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
-        NavigationUI.setupWithNavController(
-            bottomNavBar,
-            navHostFragment!!.navController
-        )
-        navController = navHostFragment.navController
     }
 
 }

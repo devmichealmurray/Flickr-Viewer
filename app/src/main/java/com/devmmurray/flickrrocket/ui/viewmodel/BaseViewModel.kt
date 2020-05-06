@@ -32,14 +32,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         get() = _loading
 
     fun refresh() {
-        _loading.value = true
-        val queryResults = sharedPref.getString(FLICKR_QUERY, "")
-        Log.d("Refresh **********", "******************************** $queryResults")
-        if (queryResults != null && queryResults != "") {
-            loadData(queryResults)
-        } else {
+//        _loading.value = true
+//        val queryResults = sharedPref.getString(FLICKR_QUERY, "")
+//        Log.d("Refresh **********", "******************************** $queryResults")
+//        if (queryResults != null && queryResults != "") {
+//            loadData(queryResults)
+//        } else {
             loadData("rocket")
-        }
+//        }
     }
 
     private fun loadData(query: String) {
@@ -55,14 +55,16 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                             val photo = link?.let { it1 -> PhotoObject(title, it1) }
                             if (photo != null) {
                                 photoList.add(photo)
+                                Log.d("Load Data Called", "${photo.title} ${photo.link}")
                             }
                         }
+                        _loading.value = false
+                        _loadError.value = false
                         _photos.value = photoList
                     }
                 } else {
                     _loadError.value = true
                     _loading.value = false
-                    _photos.value = null
                 }
             } catch (e: IOException) {
                 e.printStackTrace()

@@ -28,7 +28,7 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
         photoHolder.setOnClickListener {
             val directions = SearchListFragmentDirections
-                .actionListToDetail(p, fromRecyclerClick = true)
+                .actionListToDetail(p)
             Navigation.findNavController(photoHolder).navigate(directions)
         }
 
@@ -45,7 +45,6 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: RecyclerFlags) :
     RecyclerView.Adapter<FlickrViewHolder>() {
     private val flag = flags
-    private val _list = list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrViewHolder {
         val inflater = LayoutInflater.from(parent.context)
