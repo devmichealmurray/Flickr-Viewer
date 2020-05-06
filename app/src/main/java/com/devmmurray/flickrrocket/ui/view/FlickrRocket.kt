@@ -3,7 +3,6 @@ package com.devmmurray.flickrrocket.ui.view
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.SearchView
@@ -36,6 +35,7 @@ class FlickrRocket : AppCompatActivity() {
         )
 
         baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+
         setUpNavigation()
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -57,13 +57,11 @@ class FlickrRocket : AppCompatActivity() {
 
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d("OnQueryTextListener", ".onQueryTextSubmit Called")
                 val sharedPref = PreferenceManager
                     .getDefaultSharedPreferences(applicationContext)
                 sharedPref.edit().putString(FLICKR_QUERY, query).apply()
                 searchView?.clearFocus()
                 searchView?.setQuery("", false)
-                baseViewModel.refresh()
 
                 val directions = SearchListFragmentDirections
                     .actionSearchToSearchResults()
@@ -81,9 +79,6 @@ class FlickrRocket : AppCompatActivity() {
 
     }
 
-
-
-
     private fun setUpNavigation() {
         bottomNavBar = findViewById(R.id.bottom_nav)
         val navHostFragment = supportFragmentManager
@@ -94,4 +89,5 @@ class FlickrRocket : AppCompatActivity() {
         )
         navController = navHostFragment.navController
     }
+
 }

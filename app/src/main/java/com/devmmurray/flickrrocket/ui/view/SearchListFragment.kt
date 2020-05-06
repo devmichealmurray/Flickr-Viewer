@@ -17,7 +17,7 @@ import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
 
 
-class SearchListFragment : Fragment(){
+class SearchListFragment : Fragment() {
 
     private lateinit var searchListViewModel: BaseViewModel
     private val searchListAdapter = FlickrRocketRecyclerAdapter(arrayListOf(), RecyclerFlags.SEARCH)
@@ -40,17 +40,14 @@ class SearchListFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_flickr_list, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         searchListViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
-
         searchListViewModel.photos.observe(viewLifecycleOwner, photoListDataObserver)
         searchListViewModel.loading.observe(viewLifecycleOwner, loadingLiveDataObserver)
         searchListViewModel.loadError.observe(viewLifecycleOwner,errorLiveDataObserver)
-        searchListViewModel.refresh()
 
         suggestionsRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -93,4 +90,5 @@ class SearchListFragment : Fragment(){
             searchLoadingView.visibility = View.GONE
         }
     }
+
 }

@@ -20,12 +20,21 @@
         android:name="com.devmmurray.flickrrocket.ui.view.HomeFragment"
         android:label="fragment_flickr_detail"
         tools:layout="@layout/fragment_home">
+        <argument
+            android:name="photoPosition"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="fromRecyclerClick"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_detail_to_favorites"
             app:destination="@id/favorites" />
         <action
             android:id="@+id/action_detail_to_list"
-            app:destination="@id/search" />
+            app:destination="@id/search"/>
+
     </fragment>
     <fragment
         android:id="@+id/search"
@@ -34,10 +43,20 @@
         tools:layout="@layout/fragment_flickr_list">
         <action
             android:id="@+id/action_list_to_detail"
-            app:destination="@id/home" />
+            app:destination="@id/home">
+            <argument
+                android:name="photoPosition"
+                android:defaultValue="0"
+                app:argType="integer" />
+            <argument
+                android:name="fromRecyclerClick"
+                android:defaultValue="false"
+                app:argType="boolean" />
+        </action>
         <action
             android:id="@+id/action_search_to_searchResults"
             app:destination="@id/searchResults" />
+
     </fragment>
     <fragment
         android:id="@+id/searchResults"

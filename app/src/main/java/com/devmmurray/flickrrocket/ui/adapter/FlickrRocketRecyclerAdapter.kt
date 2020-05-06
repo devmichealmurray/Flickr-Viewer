@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.ui.view.SearchListFragmentDirections
 import com.squareup.picasso.Picasso
 
 class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -19,8 +21,17 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         buttonText.text = item
     }
 
-    fun bindPhoto(item: PhotoObject) {
+    fun bindPhoto(item: PhotoObject, position: Int) {
+
+        Log.d("Recycler.bindPhoto", "******************** $position **************************")
+        val p = position
         val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
+        photoHolder.setOnClickListener {
+            val directions = SearchListFragmentDirections
+                .actionListToDetail(p, fromRecyclerClick = true)
+            Navigation.findNavController(photoHolder).navigate(directions)
+        }
+
         Picasso.get()
             .load(item.link)
             .error(R.drawable.image_placeholder)
@@ -31,9 +42,10 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 }
 
-class FlickrRocketRecyclerAdapter(private val List: ArrayList<Any>, flags: RecyclerFlags) :
+class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: RecyclerFlags) :
     RecyclerView.Adapter<FlickrViewHolder>() {
     private val flag = flags
+    private val _list = list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,21 +58,21 @@ class FlickrRocketRecyclerAdapter(private val List: ArrayList<Any>, flags: Recyc
         })
     }
 
-    override fun getItemCount(): Int = List.size
+    override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: FlickrViewHolder, position: Int) {
         when (flag) {
             RecyclerFlags.SEARCH ->
-                holder.bindPhoto(List[position] as PhotoObject)
+                holder.bindPhoto(list[position] as PhotoObject, position)
             else ->
-                holder.bindSuggestion(List[position] as String)
+                holder.bindSuggestion(list[position] as String)
         }
      }
 
     fun updatePhotoList(newList: ArrayList<PhotoObject>) {
         Log.d("Update Photo List", "$newList")
-        List.clear()
-        List.addAll(newList)
+        list.clear()
+        list.addAll(newList)
         notifyDataSetChanged()
     }
 }

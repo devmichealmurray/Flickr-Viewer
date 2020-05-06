@@ -14,13 +14,10 @@ import com.devmmurray.flickrrocket.data.repository.Repository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-open class BaseViewModel(application: Application): AndroidViewModel(application) {
+open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPref: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(application)
-    private var position = 0
-
-    private val photoList = ArrayList<PhotoObject>()
 
     private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
     val photos: LiveData<ArrayList<PhotoObject>>
@@ -46,6 +43,7 @@ open class BaseViewModel(application: Application): AndroidViewModel(application
     }
 
     private fun loadData(query: String) {
+        val photoList = ArrayList<PhotoObject>()
         viewModelScope.launch {
             try {
                 val result = Repository.searchPhotos(query)
@@ -73,8 +71,16 @@ open class BaseViewModel(application: Application): AndroidViewModel(application
                  */
 
             } catch (e: Exception) {
+                /**
+                 * Live Event for snackbar or alert dialog
+                 */
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sharedPref.edit().putString(FLICKR_QUERY, "rocket").apply()
     }
 
 }

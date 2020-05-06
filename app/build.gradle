@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
@@ -72,10 +71,7 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$mockitoVersion"
     testImplementation "android.arch.core:core-testing:1.1.1"
 
-
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
@@ -84,8 +80,6 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kaptTest 'com.google.dagger:dagger-compiler:2.27'
 
-
-    implementation "com.android.support:palette-v7:$supportVersion"
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.squareup.moshi:moshi:1.8.0'
