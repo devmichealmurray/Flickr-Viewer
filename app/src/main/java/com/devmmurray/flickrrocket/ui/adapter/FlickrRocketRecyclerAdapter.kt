@@ -24,11 +24,10 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bindPhoto(item: PhotoObject, position: Int) {
 
         Log.d("Recycler.bindPhoto", "******************** $position **************************")
-        val p = position
         val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
         photoHolder.setOnClickListener {
             val directions = SearchListFragmentDirections
-                .actionListToDetail(p)
+                .actionListToDetail(position)
             Navigation.findNavController(photoHolder).navigate(directions)
         }
 

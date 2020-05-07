@@ -18,25 +18,25 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private val args: HomeFragmentArgs by navArgs()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        homeViewModel.refresh()
+
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("Home Fragment", "************* On View Created Called ***************")
         super.onViewCreated(view, savedInstanceState)
+//
+//        baseViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
+//        baseViewModel.refresh()
 
+loadNewPhoto(0)
 
-//        homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
-//        homeViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
-//        homeViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
-
+        loadNewPhoto(0)
         mainImageView.setOnClickListener {
             homeViewModel.nextPhoto()
             val position = homeViewModel.photoPosition.value
@@ -44,34 +44,31 @@ class HomeFragment : Fragment() {
                 loadNewPhoto(position)
             }
             homeLoadingView.visibility = View.GONE
-
-
         }
-        Log.d("OnViewCreated", " ************************* On View Created Ends **********************************")
     }
 
-    override fun onResume() {
-        Log.d("OnViewCreated", " ************************* On Resume Called **********************************")
+//    override fun onPause() {
+//        Log.d("OnResume", "********************* onStart Called*****************")
+//        super.onPause()
+//        baseViewModel.refresh()
+//    }
 
-        super.onResume()
-        Log.d("OnViewCreated", " ************************* On Resume Ends **********************************")
 
-    }
-
-    override fun onStart() {
-        Log.d("OnViewCreated", " ************************* On Start Called **********************************")
-        super.onStart()
-            loadNewPhoto(0)
-        Log.d("OnViewCreated", " ************************* On Start Ends **********************************")
-    }
 
 //    private val photoListObserver = Observer<ArrayList<PhotoObject>> {
-//            Log.d("Photo List Observer", "*********************** ${args.photoPosition}**********************")
-//            loadNewPhoto(3)
-//            val position = args.photoPosition
-//            if (position > 0) loadNewPhoto(position) else loadNewPhoto(0)
+//        Log.d("Photo List Observer", "*********************** ${it.size}**********************")
+//        it?.let {
+//            val photoPosition = args.photoPosition
+//            if (photoPosition > 0) {
+//                loadNewPhoto(photoPosition)
+//            } else {
+//                loadNewPhoto(0)
+//            }
+//            onStart()
+//        }
 //    }
-//
+
+
 //    private val loadingObserver = Observer<Boolean> { isLoading ->
 //        if (isLoading) {
 //            homeError.visibility = View.GONE
@@ -87,24 +84,20 @@ class HomeFragment : Fragment() {
 //        }
 //    }
 
-
     private fun loadNewPhoto(position: Int) {
-        Log.d(
-            "Load New Photo",
-            "************************** Load New Photo Called ***********************************"
-        )
-        val photo = homeViewModel.photos.value
 
-        Log.d("Load New Photo", "********************* ${photo?.get(position)?.link}*****************")
+        val photos = homeViewModel.photos.value
+        Log.d("loadNewPhoto", "************ ${photos?.size}")
+
         Picasso.get()
-            .load(photo?.get(position)?.link)
+            .load(photos?.get(position)?.link)
             .error(R.drawable.background)
             .placeholder(R.drawable.image_placeholder)
             .resize(250, 250)
             .centerInside()
             .into(mainImageView)
 
-        imageTitleText.text = photo?.get(position)?.title
+        imageTitleText.text = photos?.get(position)?.title
         homeLoadingView.visibility = View.GONE
 
 //        favorite.setOnClickListener {

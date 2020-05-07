@@ -32,14 +32,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         get() = _loading
 
     fun refresh() {
-//        _loading.value = true
-//        val queryResults = sharedPref.getString(FLICKR_QUERY, "")
-//        Log.d("Refresh **********", "******************************** $queryResults")
-//        if (queryResults != null && queryResults != "") {
-//            loadData(queryResults)
-//        } else {
+        _loading.value = true
+        val queryResults = sharedPref.getString(FLICKR_QUERY, "")
+        Log.d("Refresh **********", "******************************** $queryResults")
+        if (queryResults != null && queryResults != "") {
+            loadData(queryResults)
+        } else {
             loadData("rocket")
-//        }
+        }
     }
 
     private fun loadData(query: String) {
