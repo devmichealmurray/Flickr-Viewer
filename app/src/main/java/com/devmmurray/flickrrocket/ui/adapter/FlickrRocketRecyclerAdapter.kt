@@ -1,5 +1,6 @@
 package com.devmmurray.flickrrocket.ui.adapter
 
+import android.app.Application
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.PHOTO_ARRAY_LIST
 import com.devmmurray.flickrrocket.ui.view.SearchListFragmentDirections
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 
 class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -22,12 +27,11 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun bindPhoto(item: PhotoObject, position: Int) {
-
         Log.d("Recycler.bindPhoto", "******************** $position **************************")
         val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
         photoHolder.setOnClickListener {
             val directions = SearchListFragmentDirections
-                .actionListToDetail(position)
+                .actionListToDetail(position + 1)
             Navigation.findNavController(photoHolder).navigate(directions)
         }
 
@@ -46,6 +50,7 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
     private val flag = flags
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrViewHolder {
+        Log.d("FlickrRecycler", "*********** List Size = ${list.size} **********")
         val inflater = LayoutInflater.from(parent.context)
 
         return FlickrViewHolder(view = when (flag) {
@@ -72,5 +77,22 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    private fun savePhotoList() {
+        val editor = PreferenceManager
+            .getDefaultSharedPreferences(Application()).edit()
+        val json = Gson().toJson(list)
+        editor.putString(PHOTO_ARRAY_LIST, json).apply()
+    }
+
+    private fun loadPhotoList() {
+        val sharedPrefs = PreferenceManager
+            .getDefaultSharedPreferences(Application())
+        val gson = Gson()
+        val json = sharedPrefs.getString(PHOTO_ARRAY_LIST, null)
+        val type = object :
+            TypeToken<java.util.ArrayList<PhotoObject?>?>() {}.type
+        PHOTO_ARRAY_LIST = gson.fromJson(json, type)
     }
 }

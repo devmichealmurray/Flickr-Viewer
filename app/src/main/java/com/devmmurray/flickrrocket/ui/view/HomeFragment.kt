@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.devmmurray.flickrrocket.R
+import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -30,13 +32,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//
-//        baseViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
-//        baseViewModel.refresh()
 
-loadNewPhoto(0)
+        homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
+        homeViewModel.refresh()
 
-        loadNewPhoto(0)
+
         mainImageView.setOnClickListener {
             homeViewModel.nextPhoto()
             val position = homeViewModel.photoPosition.value
@@ -47,26 +47,28 @@ loadNewPhoto(0)
         }
     }
 
-//    override fun onPause() {
-//        Log.d("OnResume", "********************* onStart Called*****************")
-//        super.onPause()
-//        baseViewModel.refresh()
-//    }
+    override fun onStart() {
+        super.onStart()
+        homeViewModel.refresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+    private val photoListObserver = Observer<ArrayList<PhotoObject>> {
+        Log.d("Photo List Observer", "*********************** ${it.size}**********************")
+        val count = if (args.photoPosition == 0) 1 else args.photoPosition
+        homeViewModel.positionUpdate(count - 1)
+        it?.let {
+            if (it.size == count) {
+                loadNewPhoto(count - 1)
+            }
 
 
-
-//    private val photoListObserver = Observer<ArrayList<PhotoObject>> {
-//        Log.d("Photo List Observer", "*********************** ${it.size}**********************")
-//        it?.let {
-//            val photoPosition = args.photoPosition
-//            if (photoPosition > 0) {
-//                loadNewPhoto(photoPosition)
-//            } else {
-//                loadNewPhoto(0)
-//            }
-//            onStart()
-//        }
-//    }
+        }
+    }
 
 
 //    private val loadingObserver = Observer<Boolean> { isLoading ->
@@ -87,7 +89,6 @@ loadNewPhoto(0)
     private fun loadNewPhoto(position: Int) {
 
         val photos = homeViewModel.photos.value
-        Log.d("loadNewPhoto", "************ ${photos?.size}")
 
         Picasso.get()
             .load(photos?.get(position)?.link)

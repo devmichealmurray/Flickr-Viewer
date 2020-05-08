@@ -7,14 +7,12 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.data.model.UrlAddress
 import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +25,6 @@ class FlickrRocket : AppCompatActivity() {
     private var searchView: SearchView? = null
     private lateinit var baseViewModel: BaseViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,18 +35,16 @@ class FlickrRocket : AppCompatActivity() {
         )
 
         baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
-        baseViewModel.photos.observe(this, photoListObserver)
-        baseViewModel.refresh()
-
         setUpNavigation()
-
     }
 
-    private val photoListObserver = Observer<ArrayList<PhotoObject>> {
-        it?.let {
-
-        }
-    }
+    /**
+     *
+     *
+     * setUpNavigation Needs to be moved to FlickrRocket ViewModel
+     *
+     *
+     */
 
     private fun setUpNavigation() {
         bottomNavBar = findViewById(R.id.bottom_nav)

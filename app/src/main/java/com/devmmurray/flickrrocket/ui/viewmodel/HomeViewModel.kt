@@ -27,4 +27,17 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         }
         _photoPosition.value = position
     }
+
+    fun positionUpdate(currentPosition: Int) {
+        updatePhotoPosition(currentPosition)
+    }
+
+    private fun updatePhotoPosition(currentPosition: Int) {
+        val arraySize = photos.value?.size
+        if (position == arraySize) {
+            position = 0
+        } else {
+            position = currentPosition
+        }
+    }
 }

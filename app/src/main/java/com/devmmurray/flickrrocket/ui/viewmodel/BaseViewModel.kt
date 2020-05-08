@@ -19,6 +19,8 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     private val sharedPref: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(application)
 
+    var photosList = ArrayList<PhotoObject>()
+
     private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
     val photos: LiveData<ArrayList<PhotoObject>>
         get() = _photos
@@ -61,6 +63,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                         _loading.value = false
                         _loadError.value = false
                         _photos.value = photoList
+                        photosList = photoList
                     }
                 } else {
                     _loadError.value = true
