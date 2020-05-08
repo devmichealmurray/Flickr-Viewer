@@ -16,6 +16,14 @@ import com.devmmurray.flickrrocket.ui.view.SearchListFragmentDirections
 import com.devmmurray.flickrrocket.ui.view.SearchResultsDirections
 import com.squareup.picasso.Picasso
 
+/**
+ *
+ * Only one RecyclerView Adapter is used for this app.
+ * Constant Flags are used to adjust the adapter dynamically
+ * to the needs of that Recycler View
+ *
+ */
+
 class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val view = view
 
@@ -34,7 +42,7 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun bindPhotoSearchFrag(item: PhotoObject, position: Int, flags: RecyclerFlags) {
+    fun bindPhotos(item: PhotoObject, position: Int, flags: RecyclerFlags) {
         Log.d("Recycler.bindPhoto", "******************** $position **************************")
         val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
         photoHolder.setOnClickListener {
@@ -86,7 +94,7 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
     override fun onBindViewHolder(holder: FlickrViewHolder, position: Int) {
         when (flag) {
             RecyclerFlags.SEARCH, RecyclerFlags.SEARCH_RESULTS ->
-                holder.bindPhotoSearchFrag(list[position] as PhotoObject, position, flag)
+                holder.bindPhotos(list[position] as PhotoObject, position, flag)
             else ->
                 holder.bindSuggestion(list[position] as String)
         }

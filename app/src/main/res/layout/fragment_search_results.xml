@@ -2,9 +2,41 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchResultsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.SearchResults">
+    tools:context=".ui.view.SearchResults"
+    android:background="@drawable/background">
+
+
+    <TextView
+        android:id="@+id/flickr_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="34dp"
+        android:fontFamily="@font/anton"
+        android:padding="2dp"
+        android:text="@string/flickr"
+        android:textColor="@color/colorWhite"
+        android:textSize="26sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/rocket_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rocket_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:fontFamily="sans-serif-black"
+        android:padding="2dp"
+        android:text="@string/rocket"
+        android:textColor="@color/colorRed"
+        android:textSize="34sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintStart_toEndOf="@+id/flickr_text"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchResultsRecycler"
@@ -14,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/rocket_text" />
 
     <TextView
         android:id="@+id/searchResultsError"
