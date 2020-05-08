@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.PhotoObject
@@ -41,6 +42,11 @@ class SearchResults : Fragment() {
         searchResultsRecycler.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = searchResultsAdapter
+        }
+
+        backArrow.setOnClickListener {
+            val directions = SearchResultsDirections.actionSearchResultsToSearch()
+            Navigation.findNavController(backArrow).navigate(directions)
         }
     }
 

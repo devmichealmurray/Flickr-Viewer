@@ -5,23 +5,33 @@
     android:id="@+id/searchResultsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.SearchResults"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    tools:context=".ui.view.SearchResults">
 
+    <ImageButton
+        android:id="@+id/backArrow"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:background="@drawable/icon_button_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/flickr_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="34dp"
         android:fontFamily="@font/anton"
         android:padding="2dp"
-        android:text="@string/flickr"
+        android:text="search"
         android:textColor="@color/colorWhite"
         android:textSize="26sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/rocket_text"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/backArrow"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -31,7 +41,7 @@
         android:layout_marginTop="34dp"
         android:fontFamily="sans-serif-black"
         android:padding="2dp"
-        android:text="@string/rocket"
+        android:text="RESULTS"
         android:textColor="@color/colorRed"
         android:textSize="34sp"
         android:textStyle="italic|bold"
@@ -42,7 +52,10 @@
         android:id="@+id/searchResultsRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

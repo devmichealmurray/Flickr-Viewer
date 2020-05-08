@@ -9,4 +9,5 @@
     <color name="colorTransPressed">#20FFFFFF</color>
     <color name="shadowRed">#80F40303</color>
     <color name="shadowWhite">#7FFFFFFF</color>
+    <color name="colorLauncherBackground">#002850</color>
 </resources>

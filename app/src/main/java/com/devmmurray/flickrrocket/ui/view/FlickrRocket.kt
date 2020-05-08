@@ -26,6 +26,7 @@ class FlickrRocket : AppCompatActivity() {
     private lateinit var baseViewModel: BaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
