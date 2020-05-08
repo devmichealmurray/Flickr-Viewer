@@ -54,5 +54,13 @@
         android:id="@+id/searchResults"
         android:name="com.devmmurray.flickrrocket.ui.view.SearchResults"
         android:label="fragment_search_results"
-        tools:layout="@layout/fragment_search_results" />
+        tools:layout="@layout/fragment_search_results" >
+        <argument
+            android:name="photoPosition"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_searchResults_to_home"
+            app:destination="@id/home" />
+    </fragment>
 </navigation>

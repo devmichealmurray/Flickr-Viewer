@@ -1,7 +1,6 @@
 package com.devmmurray.flickrrocket.ui.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_flickr_list.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -34,6 +34,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
+        homeViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
+        homeViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
         homeViewModel.refresh()
 
 
@@ -52,39 +54,31 @@ class HomeFragment : Fragment() {
         homeViewModel.refresh()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     private val photoListObserver = Observer<ArrayList<PhotoObject>> {
-        Log.d("Photo List Observer", "*********************** ${it.size}**********************")
         val count = if (args.photoPosition == 0) 1 else args.photoPosition
         homeViewModel.positionUpdate(count - 1)
         it?.let {
             if (it.size == count) {
                 loadNewPhoto(count - 1)
             }
-
-
         }
     }
 
 
-//    private val loadingObserver = Observer<Boolean> { isLoading ->
-//        if (isLoading) {
-//            homeError.visibility = View.GONE
-//            homeLoadingView.visibility = View.VISIBLE
-//        }
-//    }
-//
-//    private val onErrorObserver = Observer<Boolean> { isError ->
-//        homeError.visibility = if (isError) View.VISIBLE else View.GONE
-//        if (isError) {
-//            mainImageView.visibility = View.GONE
-//            searchLoadingView.visibility = View.GONE
-//        }
-//    }
+    private val loadingObserver = Observer<Boolean> { isLoading ->
+        if (isLoading) {
+            homeError.visibility = View.GONE
+            homeLoadingView.visibility = View.VISIBLE
+        }
+    }
+
+    private val onErrorObserver = Observer<Boolean> { isError ->
+        homeError.visibility = if (isError) View.VISIBLE else View.GONE
+        if (isError) {
+            mainImageView.visibility = View.GONE
+            searchLoadingView.visibility = View.GONE
+        }
+    }
 
     private fun loadNewPhoto(position: Int) {
 

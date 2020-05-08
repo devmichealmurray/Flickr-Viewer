@@ -5,7 +5,6 @@ class UrlAddress {
     companion object {
 
         var FLICKR_QUERY = "FLICKR_QUERY"
-        var PHOTO_ARRAY_LIST = "PHOTO_ARRAY_LIST"
 
         const val OPEN_SEARCH =
             "https://api.flickr.com/services/rest/?format=json&method=flickr.photos.getRecent&api_key=0e2b6aaf8a6901c264acb91f151a3350&nojsoncallback=1."

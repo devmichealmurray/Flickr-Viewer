@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_search_results.*
 class SearchResults : Fragment() {
 
     lateinit var baseViewModel: BaseViewModel
-    private val searchResultsAdapter = FlickrRocketRecyclerAdapter(arrayListOf(), RecyclerFlags.SEARCH)
+    private val searchResultsAdapter = FlickrRocketRecyclerAdapter(arrayListOf(), RecyclerFlags.SEARCH_RESULTS)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

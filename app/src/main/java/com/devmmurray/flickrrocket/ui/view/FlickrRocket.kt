@@ -89,8 +89,8 @@ class FlickrRocket : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Don NOT Delete Unused function
-                // OnQueryTextListener require override
+                // Don NOT remove unused function
+                // OnQueryTextListener required override
                 return false
             }
         })
