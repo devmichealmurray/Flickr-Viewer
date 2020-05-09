@@ -44,6 +44,7 @@ def retrofitVersion = '2.6.0'
 def rxJavaVersion = '2.1.1'
 def daggerVersion = '2.27'
 def mockitoVersion = '2.11.0'
+def room_version = "2.2.5"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -73,8 +74,6 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$mockitoVersion"
     testImplementation "android.arch.core:core-testing:1.1.1"
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -85,11 +84,18 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.squareup.moshi:moshi:1.8.0'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
     implementation "com.squareup.retrofit2:converter-moshi:2.6.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
 
     implementation 'androidx.preference:preference:1.1.1'
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
+
+
 }

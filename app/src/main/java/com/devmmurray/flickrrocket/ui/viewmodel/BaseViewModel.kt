@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.FLICKR_QUERY
-import com.devmmurray.flickrrocket.data.repository.Repository
+import com.devmmurray.flickrrocket.data.repository.ApiRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -19,7 +19,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     private val sharedPref: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(application)
 
-    var photosList = ArrayList<PhotoObject>()
+//    var photosList = ArrayList<PhotoObject>()
 
     private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
     val photos: LiveData<ArrayList<PhotoObject>>
@@ -36,7 +36,6 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     fun refresh() {
         _loading.value = true
         val queryResults = sharedPref.getString(FLICKR_QUERY, "")
-        Log.d("Refresh **********", "******************************** $queryResults")
         if (queryResults != null && queryResults != "") {
             loadData(queryResults)
         } else {
@@ -48,13 +47,13 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         val photoList = ArrayList<PhotoObject>()
         viewModelScope.launch {
             try {
-                val result = Repository.searchPhotos(query)
+                val result = ApiRepository.searchPhotos(query)
                 if (result.isSuccessful) {
                     result.body()?.photos?.photoList?.forEach {
                         if (!it.urlLink.isNullOrEmpty() && !it.title.isNullOrEmpty()) {
                             val link = it.urlLink
                             val title = it.title
-                            val photo = link?.let { it1 -> PhotoObject(title, it1) }
+                            val photo = link?.let { it1 -> PhotoObject(title = title, link = it1) }
                             if (photo != null) {
                                 photoList.add(photo)
                                 Log.d("Load Data Called", "${photo.title} ${photo.link}")
@@ -63,7 +62,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                         _loading.value = false
                         _loadError.value = false
                         _photos.value = photoList
-                        photosList = photoList
+//                        photosList = photoList
                     }
                 } else {
                     _loadError.value = true

@@ -9,7 +9,7 @@ import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.SORT
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.TAG_MODE
 import retrofit2.Response
 
-object Repository {
+object ApiRepository {
 
     suspend fun getRecentPhotosJson(): Response<GetPhotosDto> {
         return FlickrApiService.apiClient.getRecentPhotosUrlData(
@@ -31,7 +31,4 @@ object Repository {
             noJsonCallBack = "1"
         )
     }
-
-
-
 }
