@@ -1,6 +1,8 @@
 package com.devmmurray.flickrrocket.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -82,7 +84,15 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         Log.d("Remove Favorite", "******* Remove Favorite Called ${photo.title} ********")
         coroutineScope.launch {
             useCases.removeFavorite(photo)
-       }
+        }
         _removed.value = true
+    }
+
+    fun share(url: String) {
+        textShare(url)
+    }
+
+    private fun textShare(url: String) {
+
     }
 }

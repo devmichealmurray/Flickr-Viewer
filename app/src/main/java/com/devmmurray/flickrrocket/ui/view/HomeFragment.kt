@@ -1,5 +1,6 @@
 package com.devmmurray.flickrrocket.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -168,7 +169,24 @@ class HomeFragment : Fragment() {
             favorite.visibility = View.VISIBLE
             imageTitleText.visibility = View.VISIBLE
         }
+
+        share.setOnClickListener {
+            val url = photos[position].link
+            url?.let {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Look at this photo I found with FlickrRocket! \n $url")
+                    type = "text/plain"
+                }
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context?.startActivity(shareIntent)
+            }
+        }
     }
+
+
 
 
 }

@@ -11,4 +11,5 @@
     <color name="shadowWhite">#7FFFFFFF</color>
     <color name="colorLauncherBackground">#002850</color>
     <color name="colorCommentBackground">#7BFFFFFF</color>
+    <color name="colorActiveshare">#FFEB3B</color>
 </resources>
