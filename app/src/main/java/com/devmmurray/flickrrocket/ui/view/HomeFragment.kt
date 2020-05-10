@@ -44,12 +44,14 @@ class HomeFragment : Fragment() {
         homeViewModel.refresh(isFavorites)
 
         mainImageView.setOnClickListener {
-            homeViewModel.nextPhoto()
-            val position = homeViewModel.photoPosition.value
-            if (position != null) {
-                loadNewPhoto(position)
+            if (commentCardView.visibility == View.GONE) {
+                homeViewModel.nextPhoto()
+                val position = homeViewModel.photoPosition.value
+                if (position != null) {
+                    loadNewPhoto(position)
+                }
+                homeLoadingView.visibility = View.GONE
             }
-            homeLoadingView.visibility = View.GONE
         }
     }
 
@@ -61,12 +63,16 @@ class HomeFragment : Fragment() {
 
     private val photoListObserver = Observer<ArrayList<PhotoObject>> {
 
-        // receivedPosition establishes current photo position sent from navArgs
-        val receivedPosition = if (args.photoPosition == 0) 0 else args.photoPosition
+        // receivedPosition establishes current photo position sent from navArgs. Args.photoPosition
+        //  is sent from the Recycler Adapter and default is 0
+        val receivedPosition = args.photoPosition
         homeViewModel.positionUpdate(receivedPosition)
         it?.let {
             Log.d("Photo List Observer", "************** Size = ${it.size} *****************")
-            Log.d("Photo List Observer", "************** Position = $receivedPosition *****************")
+            Log.d(
+                "Photo List Observer",
+                "************** Position = $receivedPosition *****************"
+            )
 
             if (it.size >= receivedPosition + 1) {
                 loadNewPhoto(receivedPosition)
@@ -90,23 +96,28 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadNewPhoto(position: Int) {
-
         val photos = homeViewModel.photos.value
         val photo = photos?.get(position)
-        Log.d(
-            "HomeFragment",
-            "*********** Load New Photo Called, title = ${photo?.title}************"
-        )
+
         if (!photo?.isFavorite!!) {
             favorite.setImageResource(R.drawable.ic_favorite_white)
         } else {
             favorite.setImageResource(R.drawable.ic_favorite_red)
         }
 
+        if (photo.comment != "") {
+            photoComments.visibility = View.VISIBLE
+            photoComments.text = photo.comment
+            comment.setImageResource(R.drawable.ic_comment_blue)
+        } else {
+            photoComments.visibility = View.GONE
+            comment.setImageResource(R.drawable.ic_comment_black_24dp)
+        }
+
         Picasso.get()
             .load(photos[position].link)
             .error(R.drawable.background)
-            .placeholder(R.drawable.image_placeholder)
+            .placeholder(R.drawable.background)
             .resize(250, 250)
             .centerInside()
             .into(mainImageView)
@@ -125,6 +136,37 @@ class HomeFragment : Fragment() {
                 homeViewModel.save(photo)
             }
             homeLoadingView.visibility = View.GONE
+        }
+
+        comment.setOnClickListener {
+            comment.setImageResource(R.drawable.ic_comment_blue)
+            share.visibility = View.GONE
+            favorite.visibility = View.GONE
+            imageTitleText.visibility = View.GONE
+            commentCardView.visibility = View.VISIBLE
+            title.text = photos[position].title
+        }
+
+        commentSave.setOnClickListener {
+            photos[position].comment = commentsEditText.text.toString()
+            photo.isFavorite = true
+            homeViewModel.save(photo)
+            commentCardView.visibility = View.GONE
+            comment.setImageResource(R.drawable.ic_comment_black_24dp)
+            share.visibility = View.VISIBLE
+            favorite.visibility = View.VISIBLE
+            imageTitleText.visibility = View.VISIBLE
+            photoComments.visibility = View.VISIBLE
+            photoComments.text = commentsEditText.text.toString()
+            commentsEditText.setText("")
+        }
+
+        commentCancel.setOnClickListener {
+            commentCardView.visibility = View.GONE
+            comment.setImageResource(R.drawable.ic_comment_black_24dp)
+            share.visibility = View.VISIBLE
+            favorite.visibility = View.VISIBLE
+            imageTitleText.visibility = View.VISIBLE
         }
     }
 

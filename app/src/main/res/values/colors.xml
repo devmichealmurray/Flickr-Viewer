@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#888888</color>
-    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimaryDark">#002850</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorRed">#F40303</color>
@@ -10,4 +10,5 @@
     <color name="shadowRed">#80F40303</color>
     <color name="shadowWhite">#7FFFFFFF</color>
     <color name="colorLauncherBackground">#002850</color>
+    <color name="colorCommentBackground">#7BFFFFFF</color>
 </resources>

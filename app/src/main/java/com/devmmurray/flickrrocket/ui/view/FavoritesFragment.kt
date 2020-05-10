@@ -39,7 +39,7 @@ class FavoritesFragment : Fragment() {
         favoritesViewModel.refresh(true)
 
         backArrow.setOnClickListener {
-            val directions = SearchResultsDirections.actionSearchResultsToSearch()
+            val directions = FavoritesFragmentDirections.actionFavoritesToDetail()
             Navigation.findNavController(backArrow).navigate(directions)
         }
 
