@@ -1,21 +1,18 @@
 package com.devmmurray.flickrrocket.data.repository
 
-import com.devmmurray.flickrrocket.data.model.PhotoEntity
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 
 class DbRepository(private val dataSource: IFavoritesDataSource) {
 
-    suspend fun addFavorite(favorite: PhotoEntity)
+    suspend fun addFavorite(favorite: PhotoObject)
             = dataSource.addFavorite(favorite)
 
-    suspend fun getFavorite(id: Long): PhotoEntity?
+    suspend fun getFavorite(id: Long)
             = dataSource.getFavorite(id)
 
-    suspend fun updateFavorite(id: Long)
-            = dataSource.updateFavorite(id)
-
-    suspend fun getAllFavorites(): List<PhotoEntity>
+    suspend fun getAllFavorites()
             = dataSource.getAllFavorites()
 
-    suspend fun removeFavorite(favorite: PhotoEntity)
+    suspend fun removeFavorite(favorite: PhotoObject)
             = dataSource.removeFavorite(favorite)
 }

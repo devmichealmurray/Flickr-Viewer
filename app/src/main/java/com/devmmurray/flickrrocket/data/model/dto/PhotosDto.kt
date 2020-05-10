@@ -1,4 +1,4 @@
-package com.devmmurray.flickrrocket.data.model
+package com.devmmurray.flickrrocket.data.model.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

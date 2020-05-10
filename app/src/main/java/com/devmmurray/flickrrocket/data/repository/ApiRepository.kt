@@ -1,7 +1,7 @@
 package com.devmmurray.flickrrocket.data.repository
 
 import com.devmmurray.flickrrocket.data.api.FlickrApiService
-import com.devmmurray.flickrrocket.data.model.GetPhotosDto
+import com.devmmurray.flickrrocket.data.model.dto.GetPhotosDto
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.API_KEY
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.OPEN_SEARCH_METHOD
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.SEARCH_METHOD

@@ -8,18 +8,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
-import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.data.database.RoomFavoritesDataSource
+import com.devmmurray.flickrrocket.data.database.UseCases
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.FLICKR_QUERY
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.data.repository.ApiRepository
+import com.devmmurray.flickrrocket.data.repository.DbRepository
+import com.devmmurray.flickrrocket.data.usecase.AddFavorite
+import com.devmmurray.flickrrocket.data.usecase.GetAllFavorites
+import com.devmmurray.flickrrocket.data.usecase.GetFavorite
+import com.devmmurray.flickrrocket.data.usecase.RemoveFavorite
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    val repository = DbRepository(RoomFavoritesDataSource(application))
+    private val useCases = UseCases(
+        AddFavorite(repository),
+        GetAllFavorites(repository),
+        GetFavorite(repository),
+        RemoveFavorite(repository)
+    )
+
     private val sharedPref: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(application)
-
-//    var photosList = ArrayList<PhotoObject>()
 
     private val _photos by lazy { MutableLiveData<ArrayList<PhotoObject>>() }
     val photos: LiveData<ArrayList<PhotoObject>>
@@ -33,17 +49,21 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     val loading: LiveData<Boolean>
         get() = _loading
 
-    fun refresh() {
+    fun refresh(isFavorites: Boolean) {
         _loading.value = true
         val queryResults = sharedPref.getString(FLICKR_QUERY, "")
-        if (queryResults != null && queryResults != "") {
-            loadData(queryResults)
+        if (isFavorites) {
+            loadDbData()
         } else {
-            loadData("rocket")
+            if (queryResults != null && queryResults != "") {
+                loadApiData(queryResults)
+            } else {
+                loadApiData("rocket")
+            }
         }
     }
 
-    private fun loadData(query: String) {
+    private fun loadApiData(query: String) {
         val photoList = ArrayList<PhotoObject>()
         viewModelScope.launch {
             try {
@@ -53,16 +73,19 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                         if (!it.urlLink.isNullOrEmpty() && !it.title.isNullOrEmpty()) {
                             val link = it.urlLink
                             val title = it.title
-                            val photo = link?.let { it1 -> PhotoObject(title = title, link = it1) }
+                            val photo = link?.let { it1 ->
+                                PhotoObject(
+                                    title = title,
+                                    link = it1
+                                )
+                            }
                             if (photo != null) {
                                 photoList.add(photo)
-                                Log.d("Load Data Called", "${photo.title} ${photo.link}")
                             }
                         }
                         _loading.value = false
                         _loadError.value = false
                         _photos.value = photoList
-//                        photosList = photoList
                     }
                 } else {
                     _loadError.value = true
@@ -80,6 +103,16 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                  */
             }
         }
+    }
+
+    private fun loadDbData() {
+        Log.d("Favorites View Model", "************ Load Data Called **************")
+        coroutineScope.launch {
+            val list = useCases.getAllFavorites()
+            _photos.postValue(list as ArrayList<PhotoObject>?)
+        }
+        _loading.value = false
+        _loadError.value = false
     }
 
     override fun onCleared() {

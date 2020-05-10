@@ -1,6 +1,6 @@
 package com.devmmurray.flickrrocket.data.api
 
-import com.devmmurray.flickrrocket.data.model.GetPhotosDto
+import com.devmmurray.flickrrocket.data.model.dto.GetPhotosDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

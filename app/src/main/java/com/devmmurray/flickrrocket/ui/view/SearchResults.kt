@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.ui.adapter.FlickrRocketRecyclerAdapter
 import com.devmmurray.flickrrocket.ui.adapter.RecyclerFlags
 import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
@@ -37,7 +37,7 @@ class SearchResults : Fragment() {
         baseViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         baseViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         baseViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
-        baseViewModel.refresh()
+        baseViewModel.refresh(false)
 
         searchResultsRecycler.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

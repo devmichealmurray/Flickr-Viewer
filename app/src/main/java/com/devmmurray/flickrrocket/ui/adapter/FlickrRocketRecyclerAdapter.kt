@@ -10,8 +10,9 @@ import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.PhotoObject
 import com.devmmurray.flickrrocket.data.model.UrlAddress
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
+import com.devmmurray.flickrrocket.ui.view.FavoritesFragmentDirections
 import com.devmmurray.flickrrocket.ui.view.SearchListFragmentDirections
 import com.devmmurray.flickrrocket.ui.view.SearchResultsDirections
 import com.squareup.picasso.Picasso
@@ -49,12 +50,17 @@ class FlickrViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             when (flags) {
                 RecyclerFlags.SEARCH -> {
                     val directions = SearchListFragmentDirections
-                        .actionListToDetail(position + 1)
+                        .actionListToDetail(position)
+                    Navigation.findNavController(photoHolder).navigate(directions)
+                }
+                RecyclerFlags.FAVORITES -> {
+                    val directions = FavoritesFragmentDirections
+                        .actionFavoritesToDetail(true, position)
                     Navigation.findNavController(photoHolder).navigate(directions)
                 }
                 else -> {
                     val directions = SearchResultsDirections
-                        .actionSearchResultsToHome(position + 1)
+                        .actionSearchResultsToHome(false, position)
                     Navigation.findNavController(photoHolder).navigate(directions)
                 }
 
@@ -81,10 +87,10 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
 
         return FlickrViewHolder(
             view = when (flag) {
-                RecyclerFlags.SEARCH, RecyclerFlags.SEARCH_RESULTS ->
-                    inflater.inflate(R.layout.item_photo, parent, false)
-                else ->
+                RecyclerFlags.SUGGESTIONS ->
                     inflater.inflate(R.layout.suggestion_recycler_item, parent, false)
+                else ->
+                    inflater.inflate(R.layout.item_photo, parent, false)
             }
         )
     }
@@ -93,10 +99,10 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
 
     override fun onBindViewHolder(holder: FlickrViewHolder, position: Int) {
         when (flag) {
-            RecyclerFlags.SEARCH, RecyclerFlags.SEARCH_RESULTS ->
-                holder.bindPhotos(list[position] as PhotoObject, position, flag)
-            else ->
+            RecyclerFlags.SUGGESTIONS ->
                 holder.bindSuggestion(list[position] as String)
+            else ->
+                holder.bindPhotos(list[position] as PhotoObject, position, flag)
         }
     }
 

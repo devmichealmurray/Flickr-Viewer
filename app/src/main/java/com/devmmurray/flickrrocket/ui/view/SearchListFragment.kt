@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.ui.adapter.FlickrRocketRecyclerAdapter
 import com.devmmurray.flickrrocket.ui.adapter.RecyclerFlags
 import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
@@ -49,7 +49,7 @@ class SearchListFragment : Fragment() {
 //        searchListViewModel.loading.observe(viewLifecycleOwner, loadingLiveDataObserver)
 //        searchListViewModel.loadError.observe(viewLifecycleOwner,errorLiveDataObserver)
 
-        searchListViewModel.refresh()
+        searchListViewModel.refresh(false)
 
         suggestionsRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -65,7 +65,7 @@ class SearchListFragment : Fragment() {
             searchFragRecyclerView.visibility = View.VISIBLE
 //            searchListError.visibility = View.GONE
 //            searchLoadingView.visibility = View.VISIBLE
-            searchListViewModel.refresh()
+            searchListViewModel.refresh(false)
             refreshLayout.isRefreshing = false
         }
     }

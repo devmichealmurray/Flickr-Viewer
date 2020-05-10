@@ -1,6 +1,7 @@
 package com.devmmurray.flickrrocket.ui.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.devmmurray.flickrrocket.R
-import com.devmmurray.flickrrocket.data.model.PhotoObject
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_flickr_list.*
@@ -33,11 +34,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // NavArg from favorites recycler click, informs viewModel to switch photos list
+        // the favorites list
+        val isFavorites = args.isFavorites
+
         homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         homeViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         homeViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
-        homeViewModel.refresh()
-
+        homeViewModel.refresh(isFavorites)
 
         mainImageView.setOnClickListener {
             homeViewModel.nextPhoto()
@@ -51,19 +55,24 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        homeViewModel.refresh()
+        val isFavorites = args.isFavorites
+        homeViewModel.refresh(isFavorites)
     }
 
     private val photoListObserver = Observer<ArrayList<PhotoObject>> {
-        val count = if (args.photoPosition == 0) 1 else args.photoPosition
-        homeViewModel.positionUpdate(count - 1)
+
+        // receivedPosition establishes current photo position sent from navArgs
+        val receivedPosition = if (args.photoPosition == 0) 0 else args.photoPosition
+        homeViewModel.positionUpdate(receivedPosition)
         it?.let {
-            if (it.size == count) {
-                loadNewPhoto(count - 1)
+            Log.d("Photo List Observer", "************** Size = ${it.size} *****************")
+            Log.d("Photo List Observer", "************** Position = $receivedPosition *****************")
+
+            if (it.size >= receivedPosition + 1) {
+                loadNewPhoto(receivedPosition)
             }
         }
     }
-
 
     private val loadingObserver = Observer<Boolean> { isLoading ->
         if (isLoading) {
@@ -83,26 +92,40 @@ class HomeFragment : Fragment() {
     private fun loadNewPhoto(position: Int) {
 
         val photos = homeViewModel.photos.value
+        val photo = photos?.get(position)
+        Log.d(
+            "HomeFragment",
+            "*********** Load New Photo Called, title = ${photo?.title}************"
+        )
+        if (!photo?.isFavorite!!) {
+            favorite.setImageResource(R.drawable.ic_favorite_white)
+        } else {
+            favorite.setImageResource(R.drawable.ic_favorite_red)
+        }
 
         Picasso.get()
-            .load(photos?.get(position)?.link)
+            .load(photos[position].link)
             .error(R.drawable.background)
             .placeholder(R.drawable.image_placeholder)
             .resize(250, 250)
             .centerInside()
             .into(mainImageView)
 
-        imageTitleText.text = photos?.get(position)?.title
+        imageTitleText.text = photos[position].title
         homeLoadingView.visibility = View.GONE
 
-//        favorite.setOnClickListener {
-//            if (photo?.isFavorite) {
-//                favorite.setImageResource(R.drawable.ic_favorite_white)
-//                // remove from database
-//            } else {
-//                favorite.setImageResource(R.drawable.ic_favorite_red)
-//                // add to photoObject to database
-//            }
+        favorite.setOnClickListener {
+            if (photo.isFavorite) {
+                favorite.setImageResource(R.drawable.ic_favorite_white)
+                photo.isFavorite = false
+                homeViewModel.remove(photo)
+            } else {
+                favorite.setImageResource(R.drawable.ic_favorite_red)
+                photo.isFavorite = true
+                homeViewModel.save(photo)
+            }
+            homeLoadingView.visibility = View.GONE
+        }
     }
 
 

@@ -1,20 +1,21 @@
 package com.devmmurray.flickrrocket.data.database
 
 import androidx.room.*
-import com.devmmurray.flickrrocket.data.model.PhotoEntity
+import com.devmmurray.flickrrocket.data.model.dto.PhotoEntity
 
 @Dao
 interface FavoritesDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addFavorite(photo: PhotoEntity)
+    suspend fun addFavorite(photo: PhotoEntity)
 
-    @Update
-    fun updateFavorite(photo: PhotoEntity)
+    @Query("SELECT * FROM favorites WHERE uid = :id")
+    suspend fun getFavorite(id: Long): PhotoEntity
 
     @Delete
-    fun deleteFavorite(photo: PhotoEntity)
+    suspend fun removeFavorite(photo: PhotoEntity)
 
     @Query("SELECT * FROM favorites")
-    fun getFavorites(): MutableList<PhotoEntity>
+    suspend fun getAllFavorites(): MutableList<PhotoEntity>
+
 }

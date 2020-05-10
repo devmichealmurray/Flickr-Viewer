@@ -1,12 +1,11 @@
 package com.devmmurray.flickrrocket.data.repository
 
-import com.devmmurray.flickrrocket.data.model.PhotoEntity
+import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 
 interface IFavoritesDataSource {
 
-    suspend fun addFavorite(favorite: PhotoEntity)
-    suspend fun getFavorite(id: Long): PhotoEntity?
-    suspend fun updateFavorite(id: Long)
-    suspend fun getAllFavorites(): List<PhotoEntity>
-    suspend fun removeFavorite(favorite: PhotoEntity)
+    suspend fun addFavorite(favorite: PhotoObject)
+    suspend fun getFavorite(id: Long): PhotoObject?
+    suspend fun getAllFavorites(): List<PhotoObject>
+    suspend fun removeFavorite(favorite: PhotoObject)
 }

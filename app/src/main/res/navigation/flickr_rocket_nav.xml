@@ -10,6 +10,14 @@
         android:name="com.devmmurray.flickrrocket.ui.view.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites">
+        <argument
+            android:name="isFavorites"
+            android:defaultValue="false"
+            app:argType="boolean"/>
+        <argument
+            android:name="photoPosition"
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/action_favorites_to_detail"
             app:destination="@id/home" />
@@ -20,6 +28,10 @@
         android:name="com.devmmurray.flickrrocket.ui.view.HomeFragment"
         android:label="fragment_flickr_detail"
         tools:layout="@layout/fragment_home">
+        <argument
+            android:name="isFavorites"
+            android:defaultValue="false"
+            app:argType="boolean"/>
         <argument
             android:name="photoPosition"
             android:defaultValue="0"
