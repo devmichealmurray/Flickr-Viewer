@@ -36,16 +36,9 @@ class FlickrRocket : AppCompatActivity() {
         )
 
         baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+        baseViewModel.refresh(false)
         setUpNavigation()
     }
-
-    /**
-     *
-     *
-     * setUpNavigation Needs to be moved to FlickrRocket ViewModel
-     *
-     *
-     */
 
     private fun setUpNavigation() {
         bottomNavBar = findViewById(R.id.bottom_nav)

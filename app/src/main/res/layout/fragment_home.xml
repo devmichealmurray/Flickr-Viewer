@@ -84,30 +84,33 @@
 
     <TextView
         android:id="@+id/imageTitleText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="12dp"
+        android:layout_marginEnd="24dp"
         android:maxLength="30"
         android:text="@string/title_text_placeholder"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/photoComments"
+        app:layout_constraintEnd_toStartOf="@+id/comment"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/photoComments"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/photo_comments"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/comment"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <TextView
         android:id="@+id/homeError"

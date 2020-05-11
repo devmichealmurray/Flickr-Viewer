@@ -1,11 +1,13 @@
 package com.devmmurray.flickrrocket.ui.view
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -28,7 +30,6 @@ class HomeFragment : Fragment() {
     ): View? {
 
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -36,12 +37,14 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // NavArg from favorites recycler click, informs viewModel to switch photos list
-        // the favorites list
+        // the favorites list from the database
         val isFavorites = args.isFavorites
 
         homeViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         homeViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         homeViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
+        homeViewModel.saved.observe(viewLifecycleOwner, savedObserver)
+        homeViewModel.saved.observe(viewLifecycleOwner, removedObserver)
         homeViewModel.refresh(isFavorites)
 
         mainImageView.setOnClickListener {
@@ -69,12 +72,6 @@ class HomeFragment : Fragment() {
         val receivedPosition = args.photoPosition
         homeViewModel.positionUpdate(receivedPosition)
         it?.let {
-            Log.d("Photo List Observer", "************** Size = ${it.size} *****************")
-            Log.d(
-                "Photo List Observer",
-                "************** Position = $receivedPosition *****************"
-            )
-
             if (it.size >= receivedPosition + 1) {
                 loadNewPhoto(receivedPosition)
             }
@@ -95,6 +92,19 @@ class HomeFragment : Fragment() {
             searchLoadingView.visibility = View.GONE
         }
     }
+
+    private val savedObserver = Observer<Boolean> { saved ->
+        if (saved) {
+            Toast.makeText(context, "Photo Saved!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val removedObserver = Observer<Boolean> { saved ->
+        if (saved) {
+            Toast.makeText(context, "Photo Deleted!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     private fun loadNewPhoto(position: Int) {
         val photos = homeViewModel.photos.value
@@ -127,66 +137,107 @@ class HomeFragment : Fragment() {
         homeLoadingView.visibility = View.GONE
 
         favorite.setOnClickListener {
-            if (photo.isFavorite) {
-                favorite.setImageResource(R.drawable.ic_favorite_white)
-                photo.isFavorite = false
-                homeViewModel.remove(photo)
-            } else {
-                favorite.setImageResource(R.drawable.ic_favorite_red)
-                photo.isFavorite = true
-                homeViewModel.save(photo)
-            }
-            homeLoadingView.visibility = View.GONE
+            favoriteClickListener(position)
         }
 
         comment.setOnClickListener {
-            comment.setImageResource(R.drawable.ic_comment_blue)
-            share.visibility = View.GONE
-            favorite.visibility = View.GONE
-            imageTitleText.visibility = View.GONE
-            commentCardView.visibility = View.VISIBLE
-            title.text = photos[position].title
+            commentClickListener(position)
         }
 
         commentSave.setOnClickListener {
-            photos[position].comment = commentsEditText.text.toString()
-            photo.isFavorite = true
-            homeViewModel.save(photo)
-            commentCardView.visibility = View.GONE
-            comment.setImageResource(R.drawable.ic_comment_black_24dp)
-            share.visibility = View.VISIBLE
-            favorite.visibility = View.VISIBLE
-            imageTitleText.visibility = View.VISIBLE
-            photoComments.visibility = View.VISIBLE
-            photoComments.text = commentsEditText.text.toString()
-            commentsEditText.setText("")
+            commentSaveClickListener(position)
         }
 
         commentCancel.setOnClickListener {
-            commentCardView.visibility = View.GONE
-            comment.setImageResource(R.drawable.ic_comment_black_24dp)
-            share.visibility = View.VISIBLE
-            favorite.visibility = View.VISIBLE
-            imageTitleText.visibility = View.VISIBLE
+            commentCancelClickListener()
         }
 
         share.setOnClickListener {
-            val url = photos[position].link
-            url?.let {
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Look at this photo I found with FlickrRocket! \n $url")
-                    type = "text/plain"
-                }
-                val shareIntent = Intent.createChooser(sendIntent, null)
-                context?.startActivity(shareIntent)
+            shareClickListener(position)
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+
+    /**
+     *  Click Listener Functions for Favorite, Share, and Commenting
+     */
+
+    private fun favoriteClickListener(position: Int) {
+        val currentPhoto = position.let { homeViewModel.photos.value?.get(it) }
+
+        if (currentPhoto != null) {
+            if (currentPhoto.isFavorite) {
+                favorite.setImageResource(R.drawable.ic_favorite_white)
+                currentPhoto.isFavorite = false
+                homeViewModel.remove(currentPhoto)
+            } else {
+                favorite.setImageResource(R.drawable.ic_favorite_red)
+                currentPhoto.isFavorite = true
+                homeViewModel.save(currentPhoto)
             }
+        }
+        homeLoadingView.visibility = View.GONE
+    }
+
+    private fun shareClickListener(position: Int) {
+        val photo = position.let { homeViewModel.photos.value?.get(it) }
+        val url = photo?.link
+        url?.let {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "Look at this photo I found with FlickrRocket! \n $url"
+                )
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            context?.startActivity(shareIntent)
         }
     }
 
 
+    private fun commentClickListener(position: Int) {
+        val photo = position.let { homeViewModel.photos.value?.get(it) }
+        comment.setImageResource(R.drawable.ic_comment_blue)
+        share.visibility = View.GONE
+        favorite.visibility = View.GONE
+        imageTitleText.visibility = View.GONE
+        commentCardView.visibility = View.VISIBLE
+        title.text = photo?.title
+    }
+
+    private fun commentSaveClickListener(position: Int) {
+        val photo = position.let { homeViewModel.photos.value?.get(it) }
+        if (photo != null) {
+            photo.comment = commentsEditText.text.toString()
+            photo.isFavorite = true
+            homeViewModel.save(photo)
+        }
+        commentCardView.visibility = View.GONE
+        comment.setImageResource(R.drawable.ic_comment_black_24dp)
+        share.visibility = View.VISIBLE
+        favorite.visibility = View.VISIBLE
+        imageTitleText.visibility = View.VISIBLE
+        photoComments.visibility = View.VISIBLE
+        photoComments.text = commentsEditText.text.toString()
+        commentsEditText.setText("")
+        hideKeyboard()
+    }
+
+    private fun commentCancelClickListener() {
+        commentCardView.visibility = View.GONE
+        comment.setImageResource(R.drawable.ic_comment_black_24dp)
+        share.visibility = View.VISIBLE
+        favorite.visibility = View.VISIBLE
+        imageTitleText.visibility = View.VISIBLE
+        hideKeyboard()
+    }
 
 
 }

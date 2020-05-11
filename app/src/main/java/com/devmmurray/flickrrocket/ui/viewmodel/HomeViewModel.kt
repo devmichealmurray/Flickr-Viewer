@@ -1,17 +1,9 @@
 package com.devmmurray.flickrrocket.ui.viewmodel
 
 import android.app.Application
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.devmmurray.flickrrocket.data.database.UseCases
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
-import com.devmmurray.flickrrocket.data.usecase.AddFavorite
-import com.devmmurray.flickrrocket.data.usecase.GetAllFavorites
-import com.devmmurray.flickrrocket.data.usecase.GetFavorite
-import com.devmmurray.flickrrocket.data.usecase.RemoveFavorite
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,12 +12,6 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     private var position = 0
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val useCases = UseCases(
-        AddFavorite(repository),
-        GetAllFavorites(repository),
-        GetFavorite(repository),
-        RemoveFavorite(repository)
-    )
 
     private val _saved by lazy { MutableLiveData<Boolean>() }
     val saved: LiveData<Boolean>
@@ -69,7 +55,6 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun saveFavorite(photo: PhotoObject) {
-        Log.d("Save Favorite", "******* Save Favorite Called ${photo.title} ********")
         coroutineScope.launch {
             useCases.addFavorite(photo)
         }
@@ -81,18 +66,10 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun removeFavorite(photo: PhotoObject) {
-        Log.d("Remove Favorite", "******* Remove Favorite Called ${photo.title} ********")
         coroutineScope.launch {
             useCases.removeFavorite(photo)
         }
         _removed.value = true
     }
 
-    fun share(url: String) {
-        textShare(url)
-    }
-
-    private fun textShare(url: String) {
-
-    }
 }

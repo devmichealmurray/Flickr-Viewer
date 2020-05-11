@@ -8,31 +8,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
-import com.devmmurray.flickrrocket.data.database.RoomFavoritesDataSource
 import com.devmmurray.flickrrocket.data.database.UseCases
+import com.devmmurray.flickrrocket.data.di.ApplicationModule
+import com.devmmurray.flickrrocket.data.di.DaggerViewModelComponent
 import com.devmmurray.flickrrocket.data.model.UrlAddress.Companion.FLICKR_QUERY
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.data.repository.ApiRepository
-import com.devmmurray.flickrrocket.data.repository.DbRepository
-import com.devmmurray.flickrrocket.data.usecase.AddFavorite
-import com.devmmurray.flickrrocket.data.usecase.GetAllFavorites
-import com.devmmurray.flickrrocket.data.usecase.GetFavorite
-import com.devmmurray.flickrrocket.data.usecase.RemoveFavorite
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    val repository = DbRepository(RoomFavoritesDataSource(application))
-    private val useCases = UseCases(
-        AddFavorite(repository),
-        GetAllFavorites(repository),
-        GetFavorite(repository),
-        RemoveFavorite(repository)
-    )
+
+    @Inject
+    lateinit var useCases: UseCases
+
+    init {
+        DaggerViewModelComponent.builder()
+            .applicationModule(ApplicationModule(getApplication()))
+            .build()
+            .inject(this)
+    }
 
     private val sharedPref: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(application)
