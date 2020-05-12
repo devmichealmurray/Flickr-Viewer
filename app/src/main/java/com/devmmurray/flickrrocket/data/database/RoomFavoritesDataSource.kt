@@ -3,9 +3,9 @@ package com.devmmurray.flickrrocket.data.database
 import android.content.Context
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.data.model.dto.PhotoEntity
-import com.devmmurray.flickrrocket.data.repository.IFavoritesDataSource
 
-class RoomFavoritesDataSource(context: Context) : IFavoritesDataSource {
+class RoomFavoritesDataSource(context: Context) :
+    IFavoritesDataSource {
 
     private val favoritesDAO =
         RoomDatabaseClient.getDbInstance(context).favoritesDAO()

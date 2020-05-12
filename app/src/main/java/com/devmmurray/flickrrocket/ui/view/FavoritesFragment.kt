@@ -35,6 +35,8 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        favoritesViewModel.loading.observe(viewLifecycleOwner, loadingLiveDataObserver)
+        favoritesViewModel.loadError.observe(viewLifecycleOwner, errorLiveDataObserver)
         favoritesViewModel.photos.observe(viewLifecycleOwner, listObserver)
         favoritesViewModel.refresh(true)
 
@@ -50,8 +52,8 @@ class FavoritesFragment : Fragment() {
 
         favoriteSwipeLayout.setOnRefreshListener {
             favoritesRecycler.visibility = View.VISIBLE
-//            searchListError.visibility = View.GONE
-//            searchLoadingView.visibility = View.VISIBLE
+            favoritesError.visibility = View.GONE
+            favoritesLoading.visibility = View.VISIBLE
             favoritesViewModel.refresh(true)
             favoriteSwipeLayout.isRefreshing = false
         }
@@ -69,7 +71,22 @@ class FavoritesFragment : Fragment() {
             favoritesError.visibility = View.GONE
             favoritesLoading.visibility = View.GONE
         }
+    }
 
+    private val loadingLiveDataObserver = Observer<Boolean> { isLoading ->
+        if (isLoading) {
+            favoritesLoading.visibility = View.VISIBLE
+            favoritesError.visibility = View.GONE
+            favoritesRecycler.visibility = View.GONE
+        }
+    }
+
+    private val errorLiveDataObserver = Observer<Boolean> { isError ->
+        if (isError) {
+            favoritesError.visibility = View.VISIBLE
+            favoritesRecycler.visibility = View.GONE
+            favoritesLoading.visibility = View.GONE
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.devmmurray.flickrrocket.data.repository
+package com.devmmurray.flickrrocket.data.database
 
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 

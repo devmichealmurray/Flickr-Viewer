@@ -7,6 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -36,6 +37,7 @@ class FlickrRocket : AppCompatActivity() {
         )
 
         baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+        baseViewModel.ioException.observe(this, ioExceptionObserver)
         baseViewModel.refresh(false)
         setUpNavigation()
     }
@@ -90,4 +92,13 @@ class FlickrRocket : AppCompatActivity() {
         })
     }
 
+    private val ioExceptionObserver = Observer<Boolean> { exception ->
+        if (exception) {
+
+        }
+    }
+
+
 }
+
+

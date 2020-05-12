@@ -49,6 +49,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     val loading: LiveData<Boolean>
         get() = _loading
 
+    private val _ioException by lazy { MutableLiveData<Boolean>() }
+    val ioException: LiveData<Boolean>
+        get() = _ioException
+
+    private val _exception by lazy { MutableLiveData<String>() }
+    val exception: LiveData<String>
+        get() = _exception
+
     fun refresh(isFavorites: Boolean) {
         _loading.value = true
         val queryResults = sharedPref.getString(FLICKR_QUERY, "")
@@ -73,11 +81,8 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                         if (!it.urlLink.isNullOrEmpty() && !it.title.isNullOrEmpty()) {
                             val link = it.urlLink
                             val title = it.title
-                            val photo = link?.let { it1 ->
-                                PhotoObject(
-                                    title = title,
-                                    link = it1
-                                )
+                            val photo = link?.let { link ->
+                                PhotoObject(title = title, link = link)
                             }
                             if (photo != null) {
                                 photoList.add(photo)
@@ -93,14 +98,9 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
-                /**
-                 * Live Event for snackbar or alert dialog
-                 */
-
+                _ioException.value = true
             } catch (e: Exception) {
-                /**
-                 * Live Event for snackbar or alert dialog
-                 */
+                _exception.value = e.message
             }
         }
     }

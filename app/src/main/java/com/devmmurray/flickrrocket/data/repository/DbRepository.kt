@@ -1,5 +1,6 @@
 package com.devmmurray.flickrrocket.data.repository
 
+import com.devmmurray.flickrrocket.data.database.IFavoritesDataSource
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 
 class DbRepository(private val dataSource: IFavoritesDataSource) {

@@ -17,17 +17,12 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     val saved: LiveData<Boolean>
         get() = _saved
 
-    private val _removed by lazy { MutableLiveData<Boolean>() }
-    val removed: LiveData<Boolean>
-        get() = _removed
-
     private val _photoPosition by lazy { MutableLiveData<Int>() }
     val photoPosition: LiveData<Int>
         get() = _photoPosition
 
 
     fun nextPhoto() {
-//        _loading.value = true
         getPhotoPosition()
     }
 
@@ -69,7 +64,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         coroutineScope.launch {
             useCases.removeFavorite(photo)
         }
-        _removed.value = true
+        _saved.value = false
     }
 
 }
