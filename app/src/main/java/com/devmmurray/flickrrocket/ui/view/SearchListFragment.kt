@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
 import com.devmmurray.flickrrocket.ui.adapter.FlickrRocketRecyclerAdapter
@@ -19,21 +19,23 @@ import kotlinx.android.synthetic.main.fragment_flickr_list.*
 
 class SearchListFragment : Fragment() {
 
-    private lateinit var searchListViewModel: BaseViewModel
+    private val searchListViewModel: BaseViewModel by viewModels()
     private val searchListAdapter = FlickrRocketRecyclerAdapter(arrayListOf(), RecyclerFlags.SEARCH)
-    private val suggestionListAdapter = FlickrRocketRecyclerAdapter(arrayListOf(
-        "Recent",
-        "Travel",
-        "Decor",
-        "Food",
-        "Architecture",
-        "Art",
-        "Nature",
-        "Style",
-        "Music",
-        "Movies",
-        "Beauty"
-    ), RecyclerFlags.SUGGESTIONS)
+    private val suggestionListAdapter = FlickrRocketRecyclerAdapter(
+        arrayListOf(
+            "Recent",
+            "Travel",
+            "Decor",
+            "Food",
+            "Architecture",
+            "Art",
+            "Nature",
+            "Style",
+            "Music",
+            "Movies",
+            "Beauty"
+        ), RecyclerFlags.SUGGESTIONS
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,24 +45,25 @@ class SearchListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        searchListViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+        // Live Data Observers
         searchListViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         searchListViewModel.loading.observe(viewLifecycleOwner, loadingLiveDataObserver)
         searchListViewModel.loadError.observe(viewLifecycleOwner, errorLiveDataObserver)
 
         searchListViewModel.refresh(false)
 
+        // Adapters for the suggestion and the search recyclerViews
         suggestionsRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = suggestionListAdapter
         }
 
         searchFragRecyclerView.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = searchListAdapter
         }
 
+        // Functionality for swipe refresh
         refreshLayout.setOnRefreshListener {
             searchFragRecyclerView.visibility = View.VISIBLE
             searchListError.visibility = View.GONE
@@ -69,6 +72,10 @@ class SearchListFragment : Fragment() {
             refreshLayout.isRefreshing = false
         }
     }
+
+    /**
+     *  Observer Values for the Live Data
+     */
 
     private val photoListObserver = Observer<ArrayList<PhotoObject>> { list ->
         list?.let {
@@ -82,7 +89,7 @@ class SearchListFragment : Fragment() {
     private val loadingLiveDataObserver = Observer<Boolean> { isLoading ->
         if (isLoading) {
             searchLoadingView.visibility = View.VISIBLE
-                searchListError.visibility = View.GONE
+            searchListError.visibility = View.GONE
             searchFragRecyclerView.visibility = View.GONE
         }
     }

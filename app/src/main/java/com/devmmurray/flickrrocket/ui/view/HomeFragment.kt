@@ -9,28 +9,34 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.devmmurray.flickrrocket.R
 import com.devmmurray.flickrrocket.data.model.domain.PhotoObject
+import com.devmmurray.flickrrocket.databinding.FragmentHomeBinding
 import com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by activityViewModels()
     private val args: HomeFragmentArgs by navArgs()
+
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    //inflater.inflate(R.layout.fragment_home, container, false)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,6 +71,11 @@ class HomeFragment : Fragment() {
         // Refreshes photo list and uses navArgs to determine which list to use
         homeViewModel.refresh(args.isFavorites)
     }
+
+
+    /**
+     *  Observer Values for Live Data
+     */
 
     private val photoListObserver = Observer<ArrayList<PhotoObject>> {
         // receivedPosition establishes current photo position sent from navArgs. Args.photoPosition
@@ -110,6 +121,11 @@ class HomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Load New Photo finds and loads appropriate photo and adjusts
+     * UI elements to reflect if Photo is a favorite or has a comment
+     * attached
+     */
     private fun loadNewPhoto(position: Int) {
         val photos = homeViewModel.photos.value
         val photo = photos?.get(position)
@@ -125,7 +141,7 @@ class HomeFragment : Fragment() {
 
         if (photo.comment != "") {
             photoComments.visibility = View.VISIBLE
-            photoComments.text = photo.comment
+            binding.photoComments.text = photo.comment
             comment.setImageResource(R.drawable.ic_comment_blue)
         } else {
             photoComments.visibility = View.GONE
@@ -140,7 +156,7 @@ class HomeFragment : Fragment() {
             .fit()
             .into(mainImageView)
 
-        imageTitleText.text = photos[position].title
+        binding.imageTitleText.text = photos[position].title
         homeLoadingView.visibility = View.GONE
 
         /**
@@ -170,7 +186,6 @@ class HomeFragment : Fragment() {
     /**
      *  Click Listener Functions for Favorite, Share, and Commenting
      */
-
     private fun favoriteClickListener(position: Int) {
         val currentPhoto = position.let { homeViewModel.photos.value?.get(it) }
 

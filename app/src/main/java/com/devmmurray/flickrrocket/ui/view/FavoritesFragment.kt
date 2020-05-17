@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_search_results.backArrow
 
 class FavoritesFragment : Fragment() {
 
-    private lateinit var favoritesViewModel: BaseViewModel
+    private val favoritesViewModel: BaseViewModel by viewModels()
     private val favoritesListAdapter =
         FlickrRocketRecyclerAdapter(arrayListOf(), RecyclerFlags.FAVORITES)
 
@@ -28,7 +28,6 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        favoritesViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
         return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
 
@@ -49,7 +48,7 @@ class FavoritesFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
             adapter = favoritesListAdapter
         }
-
+        // Swipe Refresh Functionality
         favoriteSwipeLayout.setOnRefreshListener {
             favoritesRecycler.visibility = View.VISIBLE
             favoritesError.visibility = View.GONE
@@ -63,6 +62,10 @@ class FavoritesFragment : Fragment() {
         super.onStart()
         favoritesViewModel.refresh(true)
     }
+
+    /**
+     * Observer Values for Live Data
+     */
 
     private val listObserver = Observer<ArrayList<PhotoObject>> { list ->
         list?.let {

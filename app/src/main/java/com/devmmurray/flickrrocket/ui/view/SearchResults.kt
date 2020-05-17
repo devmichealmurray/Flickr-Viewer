@@ -16,9 +16,6 @@ import com.devmmurray.flickrrocket.ui.adapter.RecyclerFlags
 import com.devmmurray.flickrrocket.ui.viewmodel.BaseViewModel
 import kotlinx.android.synthetic.main.fragment_search_results.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class SearchResults : Fragment() {
 
     lateinit var baseViewModel: BaseViewModel
@@ -28,12 +25,13 @@ class SearchResults : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
         return inflater.inflate(R.layout.fragment_search_results, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
+
         baseViewModel.photos.observe(viewLifecycleOwner, photoListObserver)
         baseViewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         baseViewModel.loadError.observe(viewLifecycleOwner, onErrorObserver)
@@ -51,6 +49,10 @@ class SearchResults : Fragment() {
     }
 
 
+    /**
+     * Observer Values for Live Data
+     */
+
     private val photoListObserver = Observer<ArrayList<PhotoObject>> { list ->
         list?.let {
             searchResultsAdapter.updatePhotoList(it)
@@ -60,15 +62,15 @@ class SearchResults : Fragment() {
         }
     }
     private val loadingObserver = Observer<Boolean> { isLoading ->
-        searchResultsLoading.visibility = if(isLoading) View.VISIBLE else View.GONE
         if (isLoading) {
+            searchResultsLoading.visibility = View.VISIBLE
             searchResultsError.visibility = View.GONE
             searchResultsRecycler.visibility = View.GONE
         }
     }
     private val onErrorObserver = Observer<Boolean> { isError ->
-        searchResultsError.visibility = if (isError) View.VISIBLE else View.GONE
         if (isError) {
+            searchResultsError.visibility = View.VISIBLE
             searchResultsRecycler.visibility = View.GONE
             searchResultsLoading.visibility = View.GONE
         }

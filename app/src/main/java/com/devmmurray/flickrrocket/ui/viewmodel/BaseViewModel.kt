@@ -2,7 +2,6 @@ package com.devmmurray.flickrrocket.ui.viewmodel
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -106,7 +105,6 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun loadDbData() {
-        Log.d("Favorites View Model", "************ Load Data Called **************")
         coroutineScope.launch {
             val list = useCases.getAllFavorites()
             _photos.postValue(list as ArrayList<PhotoObject>?)

@@ -1,263 +1,274 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context=".ui.view.HomeFragment">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="photo" type="com.devmmurray.flickrrocket.data.model.domain.PhotoObject"/>
+        <variable
+            name="homeViewModel"
+            type="com.devmmurray.flickrrocket.ui.viewmodel.HomeViewModel" />
 
-    <ImageView
-        android:id="@+id/mainImageView"
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/main_imageview_description"
-        android:src="@drawable/background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/background"
+        tools:context=".ui.view.HomeFragment">
 
-    <TextView
-        android:id="@+id/flickr_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="34dp"
-        android:fontFamily="@font/anton"
-        android:padding="2dp"
-        android:text="@string/flickr"
-        android:textColor="@color/colorWhite"
-        android:textSize="26sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/rocket_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/rocket_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:fontFamily="sans-serif-black"
-        android:padding="2dp"
-        android:text="@string/rocket"
-        android:textColor="@color/colorRed"
-        android:textSize="34sp"
-        android:textStyle="italic|bold"
-        app:layout_constraintStart_toEndOf="@+id/flickr_text"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/icon_button_background"
-        android:padding="12dp"
-        android:src="@drawable/ic_comment_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:background="@drawable/icon_button_background"
-        android:padding="12dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintBottom_toTopOf="@+id/comment"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/favorite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="0dp"
-        android:background="@drawable/icon_button_background"
-        android:padding="12dp"
-        android:src="@drawable/ic_favorite_white"
-        app:layout_constraintBottom_toTopOf="@+id/share"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/imageTitleText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="24dp"
-        android:maxLength="30"
-        android:text="@string/title_text_placeholder"
-        android:textColor="@color/colorWhite"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/photoComments"
-        app:layout_constraintEnd_toStartOf="@+id/comment"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/photoComments"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/photo_comments"
-        android:textColor="@color/colorWhite"
-        android:textSize="14sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/comment"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/homeError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="@string/list_view_error"
-        android:textSize="22sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/homeLoadingView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/commentCardView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="280dp"
-        android:background="@color/colorCommentBackground"
-        android:elevation="12dp"
-        android:visibility="gone"
-        app:cardCornerRadius="12dp"
-        app:contentPadding="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/mainImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ImageView
+            android:id="@+id/mainImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:contentDescription="@string/main_imageview_description"
+            android:src="@drawable/background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/commentsTitle"
+        <TextView
+            android:id="@+id/flickr_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="34dp"
+            android:fontFamily="@font/anton"
+            android:padding="2dp"
+            android:text="@string/flickr"
+            android:textColor="@color/colorWhite"
+            android:textSize="26sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/rocket_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rocket_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:fontFamily="sans-serif-black"
+            android:padding="2dp"
+            android:text="@string/rocket"
+            android:textColor="@color/colorRed"
+            android:textSize="34sp"
+            android:textStyle="italic|bold"
+            app:layout_constraintStart_toEndOf="@+id/flickr_text"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/icon_button_background"
+            android:padding="12dp"
+            android:src="@drawable/ic_comment_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/icon_button_background"
+            android:padding="12dp"
+            android:src="@drawable/ic_share"
+            app:layout_constraintBottom_toTopOf="@+id/comment"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/icon_button_background"
+            android:padding="12dp"
+            android:src="@drawable/ic_favorite_white"
+            app:layout_constraintBottom_toTopOf="@+id/share"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/imageTitleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="12dp"
+            android:maxLength="30"
+            android:text="@{photo.title}"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/photoComments"
+            app:layout_constraintEnd_toStartOf="@+id/comment"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/photoComments"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@{photo.comment}"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/comment"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/homeError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/list_view_error"
+            android:textSize="22sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/homeLoadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/commentCardView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="280dp"
+            android:background="@color/colorCommentBackground"
+            android:elevation="12dp"
+            android:visibility="gone"
+            app:cardCornerRadius="12dp"
+            app:contentPadding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mainImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/photo_comments_background"
-                android:fontFamily="@font/anton"
-                android:gravity="center"
-                android:padding="12dp"
-                android:text="Photo Comments"
-                android:textColor="@color/colorWhite"
-                android:textSize="32sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/titleHeading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:text="Title"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/commentsTitle" />
+                <TextView
+                    android:id="@+id/commentsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/photo_comments_background"
+                    android:fontFamily="@font/anton"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="Photo Comments"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="32sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="12dp"
-                android:maxLength="40"
-                android:padding="2dp"
-                android:text="Flicker Image Title Text Placeholder"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleHeading" />
+                <TextView
+                    android:id="@+id/titleHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Title"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/commentsTitle" />
 
-            <TextView
-                android:id="@+id/commentsHeading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="12dp"
-                android:text="Comments"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="12dp"
+                    android:maxLength="40"
+                    android:padding="2dp"
+                    android:text="Flicker Image Title Text Placeholder"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titleHeading" />
 
-            <EditText
-                android:id="@+id/commentsEditText"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="12dp"
-                android:background="@null"
-                android:gravity="start|top"
-                android:hint="Comment &amp; Save Your Favorites"
-                android:inputType="textCapSentences"
-                android:padding="2dp"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@id/commentSave"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/commentsHeading" />
+                <TextView
+                    android:id="@+id/commentsHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Comments"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
 
-            <Button
-                android:id="@+id/commentCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:background="@drawable/comments_cancel_button_background"
-                android:text="CANCEL"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <EditText
+                    android:id="@+id/commentsEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@null"
+                    android:gravity="start|top"
+                    android:hint="Comment &amp; Save Your Favorites"
+                    android:inputType="textCapSentences"
+                    android:padding="2dp"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/commentSave"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/commentsHeading" />
 
-            <Button
-                android:id="@+id/commentSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/comment_save_button_background"
-                android:text="SAVE"
-                android:textColor="@color/colorWhite"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/commentCancel" />
+                <Button
+                    android:id="@+id/commentCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/comments_cancel_button_background"
+                    android:text="CANCEL"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Button
+                    android:id="@+id/commentSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/comment_save_button_background"
+                    android:text="SAVE"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/commentCancel" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

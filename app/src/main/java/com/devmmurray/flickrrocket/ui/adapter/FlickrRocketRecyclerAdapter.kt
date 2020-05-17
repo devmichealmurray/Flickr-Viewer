@@ -1,6 +1,5 @@
 package com.devmmurray.flickrrocket.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +53,7 @@ class FlickrViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     // Binding for search, search results, and favorites
     fun bindPhotos(item: PhotoObject, position: Int, flags: RecyclerFlags) {
         val photoHolder: ImageView = view.findViewById(R.id.listItemImageView)
+
         photoHolder.setOnClickListener {
             when (flags) {
                 RecyclerFlags.SEARCH -> {
@@ -87,12 +87,15 @@ class FlickrViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
 class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: RecyclerFlags) :
     RecyclerView.Adapter<FlickrViewHolder>() {
+    // Flags are used to switch from one recycler layout to another instead of writing several
+    // adapter classes
     private val flag = flags
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         return FlickrViewHolder(
+            // Flag determines which layout will be inflated
             v = when (flag) {
                 RecyclerFlags.SUGGESTIONS ->
                     inflater.inflate(R.layout.suggestion_recycler_item, parent, false)
@@ -105,6 +108,7 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: FlickrViewHolder, position: Int) {
+        // Flag determines which "Bind" function will be used
         when (flag) {
             RecyclerFlags.SUGGESTIONS ->
                 holder.bindSuggestion(list[position] as String)
@@ -114,7 +118,6 @@ class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: Recyc
     }
 
     fun updatePhotoList(newList: ArrayList<PhotoObject>) {
-        Log.d("Update Photo List", "$newList")
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
