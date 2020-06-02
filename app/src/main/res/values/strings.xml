@@ -27,5 +27,19 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="ok">Okay</string>
     <string name="cancel">Cancel</string>
+    
+    <string-array name="suggestions">
+        <item>Recent</item>
+        <item>Travel</item>
+        <item>Decor</item>
+        <item>Food</item>
+        <item>Architecture</item>
+        <item>Art</item>
+        <item>Nature</item>
+        <item>Style</item>
+        <item>Music</item>
+        <item>Movies</item>
+        <item>Beauty</item>
+    </string-array>
 
 </resources>

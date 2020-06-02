@@ -28,7 +28,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
 
     init {
         DaggerViewModelComponent.builder()
-            .applicationModule(ApplicationModule(getApplication()))
+            .applicationModule(ApplicationModule(application))
             .build()
             .inject(this)
     }
@@ -80,8 +80,8 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                         if (!it.urlLink.isNullOrEmpty() && !it.title.isNullOrEmpty()) {
                             val link = it.urlLink
                             val title = it.title
-                            val photo = link?.let { link ->
-                                PhotoObject(title = title, link = link)
+                            val photo = link?.let { photoLink ->
+                                PhotoObject(title = title, link = photoLink)
                             }
                             if (photo != null) {
                                 photoList.add(photo)
