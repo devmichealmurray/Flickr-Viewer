@@ -24,10 +24,8 @@ import com.squareup.picasso.Picasso
  *
  */
 
-class FlickrViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-    val view = v
-
-    /**
+class FlickrViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+  /**
      *  The functions below are for binding the different recyclers and
      *  setting up the click listeners for each.
      *  Bind Photos uses Navigation Arguments to pass photo position and to
@@ -85,18 +83,17 @@ class FlickrViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 }
 
-class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, flags: RecyclerFlags) :
+class FlickrRocketRecyclerAdapter(private val list: ArrayList<Any>, private val flag: RecyclerFlags) :
     RecyclerView.Adapter<FlickrViewHolder>() {
     // Flags are used to switch from one recycler layout to another instead of writing several
     // adapter classes
-    private val flag = flags
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         return FlickrViewHolder(
             // Flag determines which layout will be inflated
-            v = when (flag) {
+            view = when (flag) {
                 RecyclerFlags.SUGGESTIONS ->
                     inflater.inflate(R.layout.suggestion_recycler_item, parent, false)
                 else ->
